@@ -7,6 +7,14 @@
         "build": "tsc -p tsconfig.json"
     },
     "devDependencies": {
+        "husky": "^4.3.8",
+        "prettier": "^2.2.1",
+        "pretty-quick": "^3.1.0",
         "typescript": "^4.2.3"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "pretty-quick --stagged"
+        }
     }
 }
