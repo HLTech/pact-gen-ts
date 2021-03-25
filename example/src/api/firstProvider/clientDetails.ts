@@ -5,6 +5,11 @@ const endpoint = (clientId: string) => `/clients/${clientId}`;
 
 export const clientDetailsApi = {
 
+    /**
+     * @pact
+     * @pact-description "get client details"
+     * @pact-method GET
+     */
     getClientDetails: async function (clientId: string) {
         const url = endpoint(clientId);
         const {data} = await axios.get<ApplicationDetailsDto>(url);

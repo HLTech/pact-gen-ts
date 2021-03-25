@@ -2,8 +2,9 @@ import * as ts from 'typescript';
 import * as tsMorph from 'ts-morph';
 import {mapJsDocsIntoInteraction} from "./jsDocsIntoInteraction";
 import {getBasicRepresentationOfType, getReturnTypeOfFunction} from "./typescriptTypes";
-import {changeObjectRepresentationIntoMatchingRules} from "./pactGenerating";
+import {changeObjectRepresentationIntoExample, changeObjectRepresentationIntoMatchingRules} from "./pactGenerating";
 import {isEmptyObject} from "../utils/objectType";
+import {printInteraction} from "./printInteraction";
 
 export interface Interaction {
     description?: string;
@@ -52,7 +53,7 @@ export function getInteractionFromTsNode(node: tsMorph.Node, source: tsMorph.Nod
             const basicTypeRepresentationOfResponse = getBasicRepresentationOfType(responseType, source);
 
             const newInteraction = mapJsDocsIntoInteraction(node);
-            const exampleRepresentation = changeObjectRepresentationIntoMatchingRules(basicTypeRepresentationOfResponse, '$.body');
+            const exampleRepresentation = changeObjectRepresentationIntoExample(basicTypeRepresentationOfResponse);
             if (exampleRepresentation) {
                 newInteraction.response.body = exampleRepresentation;
             }
@@ -61,8 +62,8 @@ export function getInteractionFromTsNode(node: tsMorph.Node, source: tsMorph.Nod
                 const mapped = Object.fromEntries((matchingRules as []).map((a) => [Object.keys(a)[0], a[Object.keys(a)[0]]]));
                 newInteraction.response.matchingRules = {...mapped, '$.body': {match: 'type'}};
             }
-            console.log(newInteraction.description);
-            console.log(newInteraction.response.body, '\n');
+
+            printInteraction(newInteraction);
 
             interactions.push(newInteraction);
 
