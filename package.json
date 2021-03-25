@@ -17,5 +17,8 @@
         "hooks": {
             "pre-commit": "pretty-quick --stagged"
         }
+    },
+    "dependencies": {
+        "ts-morph": "^10.0.2"
     }
 }
