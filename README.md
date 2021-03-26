@@ -136,7 +136,7 @@ interface CommentDTO {
 }
 ```
 
-## Create concept of using JavaScript decorators to get information about interaction path
+## Create the concept of using JavaScript decorators to get information about interaction path
 
 ```ts
 @BaseUrl("/api/v1/posts/:postId")
@@ -167,8 +167,30 @@ class PostsApi extends ApiClass {
 }
 ```
 
-## [_] Create concept how to get information about query string params of interaction
+## [X] Create the concept how to get information about query string params of interaction
 
-## [_] Create concept how to get information about request body of interaction
+```ts
+function fetchComments(/** @pact-query */ query: Query) {
+  // ...
+}
 
-## [_] Create concept how to get information about headers of interaction
+interface Query {
+    fromUser: string;
+    postId: string;
+}
+```
+
+## [X] Create the concept how to get information about request body of interaction
+
+```ts
+function addComment(/** @pact-body */ newComment: NewComment) {
+  // ...
+}
+
+interface NewComment {
+    content: string;
+    postId: string;
+}
+```
+
+## [_] Create the concept how to get information about headers of interaction

@@ -59,8 +59,12 @@ interface ApplicationDetailsDto {
     };
     someUnionType: 'AAA' | 'BBB' | 100;
     stringAliasType: StringAlias;
+    /** @pact-datetime */
     datetimeString: string;
+    /** @pact-datetime-with-millis */
     datetimeWithMillisString: string;
+    /** @pact-date */
     dateString: string;
+    /** @pact-email */
     emailString: string;
 }
