@@ -9,6 +9,7 @@ export const clientDetailsApi = {
      * @pact
      * @pact-description "get client details"
      * @pact-method GET
+     * @pact-path /api/clients/10
      */
     getClientDetails: async function (clientId: string) {
         const url = endpoint(clientId);

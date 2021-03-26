@@ -9,6 +9,7 @@ export const CashApi = {
      * @pact
      * @pact-description "get cash details for client"
      * @pact-method GET
+     * @pact-path /api/clients/10/cash
      */
     getCashForClient: async function (clientNumber: string) {
         const url = endpoint(clientNumber);
