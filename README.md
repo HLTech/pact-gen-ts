@@ -95,6 +95,18 @@ function fetchComments() {
 
 ### [_] Response status can be optional argument
 
+## [x] Specify api path of interaction
+
+```ts
+/**
+ * @pact
+ * @pact-path /api/images/100
+ */
+function fetchImage(imageId: number) {
+  // ...
+}
+```
+
 ## Create response body in pacts from returned type of function
 
 ### [x] Read boolen type
