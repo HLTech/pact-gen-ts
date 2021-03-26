@@ -5,12 +5,16 @@ import {getBasicRepresentationOfType, getReturnTypeOfFunction} from "./typescrip
 import {changeObjectRepresentationIntoExample, changeObjectRepresentationIntoMatchingRules} from "./pactGenerating";
 import {isEmptyObject} from "../utils/objectType";
 import {printInteraction} from "./printInteraction";
+import qs from 'qs';
 
 export interface Interaction {
     description?: string;
     request: {
         method?: string;
         path?: string;
+        body?: unknown;
+        query?: string;
+        matchingRules?: object;
     };
     response: {
         status?: number;
@@ -63,6 +67,35 @@ export function getInteractionFromTsNode(node: tsMorph.Node, source: tsMorph.Nod
                 newInteraction.response.matchingRules = {...mapped, '$.body': {match: 'type'}};
             }
 
+            const parameters = functionNode.getChildrenOfKind(ts.SyntaxKind.Parameter);
+            const requestBodyParameter = getParameterOfRequestBody(parameters);
+            const queryParameter = getParameterOfQuery(parameters);
+            if (requestBodyParameter) {
+                const parameterType = requestBodyParameter.getType();
+                const basicTypeRepresentationOfRequestBody = getBasicRepresentationOfType(parameterType, source);
+                const exampleRepresentation = changeObjectRepresentationIntoExample(basicTypeRepresentationOfRequestBody);
+                if (exampleRepresentation) {
+                    newInteraction.request.body = exampleRepresentation;
+                }
+                const matchingRules = changeObjectRepresentationIntoMatchingRules(basicTypeRepresentationOfResponse, '$.body');
+                if (isEmptyObject(matchingRules) === false) {
+                    const mapped = Object.fromEntries((matchingRules as []).map((a) => [Object.keys(a)[0], a[Object.keys(a)[0]]]));
+                    newInteraction.request.matchingRules = {...mapped, '$.body': {match: 'type'}};
+                }
+            }
+            if (queryParameter) {
+                const parameterType = queryParameter.getType();
+                const basicTypeRepresentationOfQuery = getBasicRepresentationOfType(parameterType, source);
+                const exampleRepresentationOfQueryObject = changeObjectRepresentationIntoExample(basicTypeRepresentationOfQuery);
+                const exampleRepresentationOfQueryStrings = qs.stringify(exampleRepresentationOfQueryObject);
+                newInteraction.request.query = exampleRepresentationOfQueryStrings;
+                const matchingRules = changeObjectRepresentationIntoMatchingRules(basicTypeRepresentationOfQuery, '$.query');
+                if (isEmptyObject(matchingRules) === false) {
+                    const mapped = Object.fromEntries((matchingRules as []).map((a) => [Object.keys(a)[0], a[Object.keys(a)[0]]]));
+                    newInteraction.request.matchingRules = {...mapped, ...newInteraction.request.matchingRules};
+                }
+            }
+
             printInteraction(newInteraction);
 
             interactions.push(newInteraction);
@@ -73,4 +106,22 @@ export function getInteractionFromTsNode(node: tsMorph.Node, source: tsMorph.Nod
 
     const children = node.getChildren();
     children.map((child) => getInteractionFromTsNode(child, source, interactions));
+}
+
+const getParameterOfRequestBody = (parameters: tsMorph.ParameterDeclaration[]) => {
+    for (const parameter of parameters) {
+        const jsDocIdentifierNode = parameter.getFirstChildByKind(ts.SyntaxKind.JSDocComment)?.getFirstChildByKind(ts.SyntaxKind.JSDocTag)?.getFirstChildByKind(ts.SyntaxKind.Identifier);
+        if (jsDocIdentifierNode?.getText() === 'pact-body') {
+            return parameter;
+        }
+    }
+}
+
+const getParameterOfQuery = (parameters: tsMorph.ParameterDeclaration[]) => {
+    for (const parameter of parameters) {
+        const jsDocIdentifierNode = parameter.getFirstChildByKind(ts.SyntaxKind.JSDocComment)?.getFirstChildByKind(ts.SyntaxKind.JSDocTag)?.getFirstChildByKind(ts.SyntaxKind.Identifier);
+        if (jsDocIdentifierNode?.getText() === 'pact-query') {
+            return parameter;
+        }
+    }
 }
