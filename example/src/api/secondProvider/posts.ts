@@ -9,6 +9,7 @@ export const postsApi = {
     /**
      * @pact
      * @pact-description "get user posts"
+     * @pact-path /api/clients/10/posts
      * @pact-method GET
      */
     getPosts: async function (clientNumber: string, /** @pact-query */ query: QueryToGetPosts): Promise<PostDto[]> {
@@ -20,6 +21,7 @@ export const postsApi = {
     /**
      * @pact
      * @pact-description "add new post"
+     * @pact-path /api/clients/10/posts
      * @pact-method POST
      */
     addNewPost: async function (clientNumber: string, /** @pact-body */ newPost: NewPost) {
@@ -29,6 +31,7 @@ export const postsApi = {
 
     /**
      * @pact
+     * @pact-path /api/clients/10/posts/25
      * @pact-method DELETE
      */
     deletePost: async function ({clientNumber, postId} : {clientNumber: string, postId: string}) {
