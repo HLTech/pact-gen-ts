@@ -36,14 +36,14 @@ function createPactForProvider(provider: Provider, pactsConfig: PactConfig) {
         metadata: {pactSpecification: {version: '2.0.0'}},
     };
 
-    pactDefinition.interactions = readInteractionsFromFiles(provider.apiPath);
+    pactDefinition.interactions = readInteractionsFromFiles(provider.apiPath, provider);
 
     const resultJSON = JSON.stringify(pactDefinition, null, 2);
     const resultFilePath = `${pactsConfig.buildDir}/${pactsConfig.consumer}-${provider.provider}.json`;
     fs.writeFileSync(resultFilePath, resultJSON);
 }
 
-function readInteractionsFromFiles(directoryPathWithApi: string) {
+function readInteractionsFromFiles(directoryPathWithApi: string, provider: Provider) {
     const interactions: Interaction[] = [];
 
     const typescriptProject = new tsMorph.Project();
@@ -51,7 +51,7 @@ function readInteractionsFromFiles(directoryPathWithApi: string) {
     for (const file of getAllFilesFromDirectory('./' + directoryPathWithApi)) {
         const sourceFile = typescriptProject.getSourceFileOrThrow(file);
 
-        getInteractionFromTsNode(sourceFile, sourceFile, interactions);
+        getInteractionFromTsNode(sourceFile, sourceFile, interactions, provider);
     }
 
     return interactions;
