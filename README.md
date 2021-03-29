@@ -205,4 +205,34 @@ interface NewComment {
 }
 ```
 
-## [_] Create the concept how to get information about headers of interaction
+## [X] Create the concept how to get information about headers of interaction
+
+In **pacts.config.js** you can specify common headers for request or response in the range of provider:
+```js
+module.exports = {
+  providers: [
+      {
+          provider: 'some-provider',
+          apiPath: '/src/api',
+          requestHeaders: {
+              authorization: 'auth',
+          },
+          responseHeaders: {
+              'Content-Type': 'application/json',
+          },
+      }
+  ],
+}
+```
+
+You can also add headers by jsDocs:
+```ts
+/**
+ * @pact
+ * @pact-request-header "Content-Type" "application/pdf"
+ * @pact-response-header "Content-Type" "application/pdf"
+ */
+function updateReport() {
+  // ...
+}
+```

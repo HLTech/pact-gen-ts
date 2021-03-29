@@ -7,6 +7,8 @@ export interface PactConfig {
 export interface Provider {
     provider: string;
     apiPath: string;
+    requestHeaders?: Record<string, string>;
+    responseHeaders?: Record<string, string>;
 }
 
 const PACTS_CONFIG_FILE = '/pacts.config.js';

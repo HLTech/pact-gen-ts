@@ -6,6 +6,7 @@ import {changeObjectRepresentationIntoExample, changeObjectRepresentationIntoMat
 import {isEmptyObject} from "../utils/objectType";
 import {printInteraction} from "./printInteraction";
 import qs from 'qs';
+import {Provider} from "./read-pacts-config";
 
 export interface Interaction {
     description?: string;
@@ -15,15 +16,17 @@ export interface Interaction {
         body?: unknown;
         query?: string;
         matchingRules?: object;
+        headers?: Record<string, string>;
     };
     response: {
         status?: number;
         body?: unknown;
         matchingRules?: object;
+        headers?: Record<string, string>;
     };
 }
 
-export function getInteractionFromTsNode(node: tsMorph.Node, source: tsMorph.Node, interactions: Interaction[]) {
+export function getInteractionFromTsNode(node: tsMorph.Node, source: tsMorph.Node, interactions: Interaction[], provider: Provider) {
     if (tsMorph.Node.isJSDoc(node)) {
 
         const getFunctionNode = (node: tsMorph.Node) => {
@@ -57,6 +60,8 @@ export function getInteractionFromTsNode(node: tsMorph.Node, source: tsMorph.Nod
             const basicTypeRepresentationOfResponse = getBasicRepresentationOfType(responseType, source);
 
             const newInteraction = mapJsDocsIntoInteraction(node);
+            newInteraction.request.headers = {...provider.requestHeaders, ...newInteraction.request.headers};
+            newInteraction.response.headers = {...provider.responseHeaders, ...newInteraction.response.headers};
             const exampleRepresentation = changeObjectRepresentationIntoExample(basicTypeRepresentationOfResponse);
             if (exampleRepresentation) {
                 newInteraction.response.body = exampleRepresentation;
@@ -105,7 +110,7 @@ export function getInteractionFromTsNode(node: tsMorph.Node, source: tsMorph.Nod
     }
 
     const children = node.getChildren();
-    children.map((child) => getInteractionFromTsNode(child, source, interactions));
+    children.map((child) => getInteractionFromTsNode(child, source, interactions, provider));
 }
 
 const getParameterOfRequestBody = (parameters: tsMorph.ParameterDeclaration[]) => {

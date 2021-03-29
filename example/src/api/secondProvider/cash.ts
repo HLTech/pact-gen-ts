@@ -15,7 +15,20 @@ export const CashApi = {
         const url = endpoint(clientNumber);
         const {data} = await axios.get<CashDto>(url);
         return data;
-    }
+    },
+
+    /**
+     * @pact
+     * @pact-description "get cash report for client"
+     * @pact-method GET
+     * @pact-path /api/clients/10/cash/report
+     * @pact-response-header "Content-Type" "application/pdf"
+     */
+    getCashReport: async function (clientNumber: string) {
+        const url = endpoint(clientNumber) + '/report';
+        const {data} = await axios.get<string>(url);
+        return data;
+    },
 
 }
 
