@@ -43,6 +43,7 @@ jobs:
               with:
                   name: build-14.x
                   path: lib
+            - run: npm install
             - name: Release
               run: npm publish
               env:
