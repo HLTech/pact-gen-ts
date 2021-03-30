@@ -1,10 +1,29 @@
 {
     "name": "pact-gen-ts",
     "version": "0.0.1",
+    "description": "Generating pact files from typescript definitions",
+    "keywords": [
+        "pacts",
+        "contracts",
+        "tests",
+        "typescript"
+    ],
     "main": "./lib/index.js",
+    "bin": {
+        "pact-gen-ts": "./bin/pact-gen-ts.js"
+    },
+    "files": [
+        "lib",
+        "bin"
+    ],
     "license": "MIT",
     "scripts": {
-        "build": "tsc -p tsconfig.json"
+        "build": "tsc -p tsconfig.json",
+        "release": "semantic-release"
+    },
+    "dependencies": {
+        "qs": "^6.10.1",
+        "ts-morph": "^10.0.2"
     },
     "devDependencies": {
         "@types/node": "^14.14.35",
@@ -12,15 +31,19 @@
         "husky": "^4.3.8",
         "prettier": "^2.2.1",
         "pretty-quick": "^3.1.0",
+        "semantic-release": "^17.4.2",
         "typescript": "^4.2.3"
     },
-    "husky": {
-        "hooks": {
-            "pre-commit": "pretty-quick --stagged"
-        }
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/HLTech/pact-gen-ts.git"
     },
-    "dependencies": {
-        "qs": "^6.10.1",
-        "ts-morph": "^10.0.2"
+    "homepage": "https://github.com/HLTech/pact-gen-ts",
+    "bugs": {
+        "url": "https://github.com/HLTech/pact-gen-ts/issues"
+    },
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org/",
+        "tag": "latest"
     }
 }
