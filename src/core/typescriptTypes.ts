@@ -28,6 +28,15 @@ export function getBasicRepresentationOfType(entryType: tsMorph.Type, source: ts
         isArray = true;
         entryType = entryType.getArrayElementTypeOrThrow();
     }
+    if (entryType.isLiteral()) {
+        const literalValue = String(entryType.getLiteralValue());
+        return {
+            objectType: undefined,
+            enumValues: [literalValue],
+            isEnum: true,
+            isArray,
+        };
+    }
     if ((entryType.isEnum() || entryType.isUnion()) && stringRepresentation !== 'boolean') {
         const enumMembers = entryType.getUnionTypes();
         const enumValues = enumMembers.map((member) => member.getLiteralValue()).filter((member) => member);
@@ -35,6 +44,7 @@ export function getBasicRepresentationOfType(entryType: tsMorph.Type, source: ts
             objectType: undefined,
             enumValues: enumValues as Array<number | string>,
             isEnum: true,
+            isArray,
         };
     }
     switch (stringRepresentation) {
@@ -66,4 +76,4 @@ const getObjectTypeRepresentationForJsDocTag = (tag: string) => {
         return undefined;
     }
     return tag.slice(5);
-}
+};

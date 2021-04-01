@@ -1,10 +1,9 @@
-import {firstProviderAxios} from "../axios";
+import {firstProviderAxios} from '../axios';
 
 const axios = firstProviderAxios;
 const endpoint = (clientId: string) => `/clients/${clientId}`;
 
 export const clientDetailsApi = {
-
     /**
      * @pact
      * @pact-description "get client details"
@@ -15,9 +14,8 @@ export const clientDetailsApi = {
         const url = endpoint(clientId);
         const {data} = await axios.get<ApplicationDetailsDto>(url);
         return data;
-    }
-
-}
+    },
+};
 
 interface SomeType {
     fieldA: string;
@@ -37,7 +35,7 @@ enum NumberEnum {
     TWO,
     THREE,
     SEVEN = 7,
-    EIGHT
+    EIGHT,
 }
 
 type StringAlias = string;
@@ -52,11 +50,11 @@ interface ApplicationDetailsDto {
     };
     intersectionField: SomeType & {fieldC: number};
     enumType: SomeType;
-    numberEnum:NumberEnum;
+    numberEnum: NumberEnum;
     someOtherObject: {
         someInnerObject: {
             someNextEnum: SomeEnum;
-        }
+        };
     };
     someUnionType: 'AAA' | 'BBB' | 100;
     stringAliasType: StringAlias;
@@ -68,4 +66,5 @@ interface ApplicationDetailsDto {
     dateString: string;
     /** @pact-email */
     emailString: string;
+    constString: 'CONST';
 }
