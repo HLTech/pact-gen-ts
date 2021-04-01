@@ -48,6 +48,8 @@ export function getBasicRepresentationOfType(entryType: tsMorph.Type, source: ts
         };
     }
     switch (stringRepresentation) {
+        case 'Blob':
+            return {objectType: 'string', isArray};
         case 'string':
         case 'boolean':
         case 'number':
