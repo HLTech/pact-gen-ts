@@ -1,10 +1,9 @@
-import {secondProviderAxios} from "../axios";
+import {secondProviderAxios} from '../axios';
 
 const axios = secondProviderAxios;
 const endpoint = (clientNumber: string) => `/clients/${clientNumber}/cash`;
 
 export const CashApi = {
-
     /**
      * @pact
      * @pact-description "get cash details for client"
@@ -22,7 +21,6 @@ export const CashApi = {
      * @pact-description "get cash report for client"
      * @pact-method GET
      * @pact-path /api/clients/10/cash/report
-     * @pact-response-header "Content-Type" "application/pdf"
      */
     getCashReport: async function (clientNumber: string) {
         const url = endpoint(clientNumber) + '/report';
@@ -30,7 +28,19 @@ export const CashApi = {
         return data;
     },
 
-}
+    /**
+     * @pact
+     * @pact-description "get file of cash report for client"
+     * @pact-method GET
+     * @pact-path /api/clients/10/cash/report/file
+     * @pact-response-header "Content-Type" "application/pdf"
+     */
+    downloadCashReport: async function (clientNumber: string) {
+        const url = endpoint(clientNumber) + '/report/file';
+        const {data} = await axios.get<Blob>(url);
+        return data;
+    },
+};
 
 interface CashDto {
     booleanField: boolean;
