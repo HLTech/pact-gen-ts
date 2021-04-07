@@ -23,6 +23,11 @@ export function getBasicRepresentationOfType(entryType: tsMorph.Type, source: ts
         return {objectType: undefined};
     }
 
+    if (entryType.isTuple()) {
+        console.error('[ERROR]: tuples in this tool are not allowed.');
+        process.exit(1);
+    }
+
     let isArray = false;
     if (entryType.isArray()) {
         isArray = true;
