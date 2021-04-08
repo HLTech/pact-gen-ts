@@ -1,12 +1,12 @@
 import * as ts from 'typescript';
 import * as tsMorph from 'ts-morph';
-import {mapJsDocsIntoInteraction} from "./jsDocsIntoInteraction";
-import {getBasicRepresentationOfType, getReturnTypeOfFunction} from "./typescriptTypes";
-import {changeObjectRepresentationIntoExample, changeObjectRepresentationIntoMatchingRules} from "./pactGenerating";
-import {isEmptyObject} from "../utils/objectType";
-import {printInteraction} from "./printInteraction";
+import {mapJsDocsIntoInteraction} from './jsDocsIntoInteraction';
+import {getBasicRepresentationOfType, getReturnTypeOfFunction} from './typescriptTypes';
+import {changeObjectRepresentationIntoExample, changeObjectRepresentationIntoMatchingRules} from './pactGenerating';
+import {isEmptyObject} from '../utils/objectType';
+import {printInteraction} from './printInteraction';
 import qs from 'qs';
-import {Provider} from "./read-pacts-config";
+import {Provider} from './read-pacts-config';
 
 export interface Interaction {
     description?: string;
@@ -28,7 +28,6 @@ export interface Interaction {
 
 export function getInteractionFromTsNode(node: tsMorph.Node, source: tsMorph.Node, interactions: Interaction[], provider: Provider) {
     if (tsMorph.Node.isJSDoc(node)) {
-
         const getFunctionNode = (node: tsMorph.Node) => {
             switch (node.getKind()) {
                 case ts.SyntaxKind.FunctionDeclaration:
@@ -42,7 +41,7 @@ export function getInteractionFromTsNode(node: tsMorph.Node, source: tsMorph.Nod
                         return (
                             variableDeclarationNode.getFirstChildByKind(ts.SyntaxKind.FunctionDeclaration) ||
                             variableDeclarationNode.getFirstChildByKind(ts.SyntaxKind.ArrowFunction)
-                        )
+                        );
                     }
                     break;
                 case ts.SyntaxKind.PropertyAssignment:
@@ -55,8 +54,11 @@ export function getInteractionFromTsNode(node: tsMorph.Node, source: tsMorph.Nod
         const parentNode = node.getParent();
         const functionNode = getFunctionNode(parentNode);
         if (functionNode) {
-            const functionType = functionNode.getType();
-            const responseType = getReturnTypeOfFunction(functionType);
+            let responseType = getResponseTypeFromFunctionBody(functionNode.getFirstChildByKindOrThrow(ts.SyntaxKind.Block))?.getType();
+            if (!responseType) {
+                const functionType = functionNode.getType();
+                responseType = getReturnTypeOfFunction(functionType);
+            }
             const basicTypeRepresentationOfResponse = getBasicRepresentationOfType(responseType, source);
 
             const newInteraction = mapJsDocsIntoInteraction(node);
@@ -73,10 +75,14 @@ export function getInteractionFromTsNode(node: tsMorph.Node, source: tsMorph.Nod
             }
 
             const parameters = functionNode.getChildrenOfKind(ts.SyntaxKind.Parameter);
-            const requestBodyParameter = getParameterOfRequestBody(parameters);
-            const queryParameter = getParameterOfQuery(parameters);
-            if (requestBodyParameter) {
-                const parameterType = requestBodyParameter.getType();
+            let nodeWithRequestBody: tsMorph.VariableDeclaration | tsMorph.ParameterDeclaration | undefined = getParameterOfRequestBody(
+                parameters,
+            );
+            if (!nodeWithRequestBody) {
+                nodeWithRequestBody = getRequestBodyVariable(functionNode.getFirstChildByKindOrThrow(ts.SyntaxKind.Block));
+            }
+            if (nodeWithRequestBody) {
+                const parameterType = nodeWithRequestBody.getType();
                 const basicTypeRepresentationOfRequestBody = getBasicRepresentationOfType(parameterType, source);
                 const exampleRepresentation = changeObjectRepresentationIntoExample(basicTypeRepresentationOfRequestBody);
                 if (exampleRepresentation) {
@@ -88,6 +94,7 @@ export function getInteractionFromTsNode(node: tsMorph.Node, source: tsMorph.Nod
                     newInteraction.request.matchingRules = {...mapped, '$.body': {match: 'type'}};
                 }
             }
+            const queryParameter = getParameterOfQuery(parameters);
             if (queryParameter) {
                 const parameterType = queryParameter.getType();
                 const basicTypeRepresentationOfQuery = getBasicRepresentationOfType(parameterType, source);
@@ -113,20 +120,52 @@ export function getInteractionFromTsNode(node: tsMorph.Node, source: tsMorph.Nod
     children.map((child) => getInteractionFromTsNode(child, source, interactions, provider));
 }
 
+const getResponseTypeFromFunctionBody = (bodyOfFunction: tsMorph.Block) => {
+    const responseBodyJsDoc = bodyOfFunction.getDescendantsOfKind(ts.SyntaxKind.JSDocComment).find((jsDocComment) => {
+        return (
+            jsDocComment.getFirstChildByKind(ts.SyntaxKind.JSDocTag)?.getFirstChildByKind(ts.SyntaxKind.Identifier)?.getText() ===
+            'pact-response-body'
+        );
+    });
+    if (responseBodyJsDoc) {
+        const variableStatementNode = responseBodyJsDoc.getParent();
+        return variableStatementNode.getFirstDescendantByKind(ts.SyntaxKind.VariableDeclaration);
+    }
+};
+
 const getParameterOfRequestBody = (parameters: tsMorph.ParameterDeclaration[]) => {
     for (const parameter of parameters) {
-        const jsDocIdentifierNode = parameter.getFirstChildByKind(ts.SyntaxKind.JSDocComment)?.getFirstChildByKind(ts.SyntaxKind.JSDocTag)?.getFirstChildByKind(ts.SyntaxKind.Identifier);
+        const jsDocIdentifierNode = parameter
+            .getFirstChildByKind(ts.SyntaxKind.JSDocComment)
+            ?.getFirstChildByKind(ts.SyntaxKind.JSDocTag)
+            ?.getFirstChildByKind(ts.SyntaxKind.Identifier);
         if (jsDocIdentifierNode?.getText() === 'pact-body') {
             return parameter;
         }
     }
-}
+};
 
 const getParameterOfQuery = (parameters: tsMorph.ParameterDeclaration[]) => {
     for (const parameter of parameters) {
-        const jsDocIdentifierNode = parameter.getFirstChildByKind(ts.SyntaxKind.JSDocComment)?.getFirstChildByKind(ts.SyntaxKind.JSDocTag)?.getFirstChildByKind(ts.SyntaxKind.Identifier);
+        const jsDocIdentifierNode = parameter
+            .getFirstChildByKind(ts.SyntaxKind.JSDocComment)
+            ?.getFirstChildByKind(ts.SyntaxKind.JSDocTag)
+            ?.getFirstChildByKind(ts.SyntaxKind.Identifier);
         if (jsDocIdentifierNode?.getText() === 'pact-query') {
             return parameter;
         }
     }
-}
+};
+
+const getRequestBodyVariable = (bodyOfFunction: tsMorph.Block) => {
+    const pactBodyJsDoc = bodyOfFunction.getDescendantsOfKind(ts.SyntaxKind.JSDocComment).find((jsDocComment) => {
+        return (
+            jsDocComment.getFirstChildByKind(ts.SyntaxKind.JSDocTag)?.getFirstChildByKind(ts.SyntaxKind.Identifier)?.getText() ===
+            'pact-body'
+        );
+    });
+    if (pactBodyJsDoc) {
+        const variableStatementNode = pactBodyJsDoc.getParent();
+        return variableStatementNode.getFirstDescendantByKind(ts.SyntaxKind.VariableDeclaration);
+    }
+};
