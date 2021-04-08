@@ -18,7 +18,7 @@ export interface ObjectRepresentation {
 }
 
 export function getBasicRepresentationOfType(entryType: tsMorph.Type, source: tsMorph.Node): ObjectRepresentation {
-    const stringRepresentation = entryType.getText(source);
+    let stringRepresentation = entryType.getText(source);
 
     if (stringRepresentation.includes('AxiosResponse<any>')) {
         return {objectType: undefined};
@@ -33,6 +33,7 @@ export function getBasicRepresentationOfType(entryType: tsMorph.Type, source: ts
     if (entryType.isArray()) {
         isArray = true;
         entryType = entryType.getArrayElementTypeOrThrow();
+        stringRepresentation = entryType.getText(source);
     }
     if (entryType.isLiteral()) {
         const literalValue = String(entryType.getLiteralValue());

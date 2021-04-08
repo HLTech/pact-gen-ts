@@ -23,7 +23,7 @@ export const changeObjectRepresentationIntoExample = (objectRepresentation: Obje
     if (objectRepresentation.isArray) {
         return [
             changeObjectRepresentationIntoExample({
-                objectType: objectRepresentation.objectType,
+                ...objectRepresentation,
                 isArray: false,
             }),
         ];

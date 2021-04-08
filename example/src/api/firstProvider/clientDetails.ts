@@ -40,6 +40,8 @@ enum NumberEnum {
 
 type StringAlias = string;
 
+type UnionType = 'OPTION_1' | 'OPTION_2' | 'OPTION_3';
+
 interface ApplicationDetailsDto {
     booleanField: boolean;
     stringField: string;
@@ -69,5 +71,7 @@ interface ApplicationDetailsDto {
     constString: 'CONST';
     /** @pact-example "99-400" */
     postCode: string;
+    stringArray: string[];
+    unionsArray: UnionType[];
     // tupleField: [number, string]; | not allowed type
 }
