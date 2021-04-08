@@ -9,24 +9,26 @@ All these points are only an early version of implementation for that package.
 ## [x] Generating information about consumer in pacts
 
 In **pacts.config.js**:
+
 ```js
 module.exports = {
-  consumer: 'some-consumer',
-}
+    consumer: 'some-consumer',
+};
 ```
 
 ## [x] Generating information about provider in pacts
 
 In **pacts.config.js**:
+
 ```js
 module.exports = {
-  providers: [
-    {
-      provider: 'some-provider',
-      apiPath: '/src/api',
-    },
-  ],
-}
+    providers: [
+        {
+            provider: 'some-provider',
+            apiPath: '/src/api',
+        },
+    ],
+};
 ```
 
 ### [x] Specify multiple providers
@@ -38,10 +40,11 @@ Pact Specification in version 2.0.0
 ## [x] Specify build dir for output pacts
 
 In **pacts.config.js**:
+
 ```js
 module.exports = {
-  buildDir: '/pacts',
-}
+    buildDir: '/pacts',
+};
 ```
 
 ## [x] Specify API function in code
@@ -51,7 +54,7 @@ module.exports = {
  * @pact
  */
 function fetchComments() {
-  // ...
+    // ...
 }
 ```
 
@@ -63,7 +66,7 @@ function fetchComments() {
  * @pact-description "request to get comments"
  */
 function fetchComments() {
-  // ...
+    // ...
 }
 ```
 
@@ -77,7 +80,7 @@ function fetchComments() {
  * @pact-method GET
  */
 function fetchComments() {
-  // ...
+    // ...
 }
 ```
 
@@ -89,7 +92,7 @@ function fetchComments() {
  * @pact-response-status 200
  */
 function fetchComments() {
-  // ...
+    // ...
 }
 ```
 
@@ -103,79 +106,134 @@ function fetchComments() {
  * @pact-path /api/images/100
  */
 function fetchImage(imageId: number) {
-  // ...
+    // ...
 }
 ```
 
-## Create response body in pacts from returned type of function
+## [x] Create response body in pacts from returned type of function
 
-### [x] Read boolen type
+```ts
+/**
+ * @pact
+ */
+function fetchComments() {
+    // ...
+    return data;
+}
+```
+
+Pact-gen-ts recognizes response body type of interaction from returned object.
+
+## [x] Set manually what is response body
+
+```ts
+/**
+ * @pact
+ */
+function fetchComments() {
+    // ...
+    /** @pact-response-body */
+    const data = response.body;
+    // ...
+}
+```
+
+## Analyze and recognize types
+
+### [x] Read boolean type
+
 ### [x] Read number type
+
 ### [x] Read string type
+
 ### [x] Read nested object
+
 ### [x] Read intersection types
+
 ### [x] Read union types
+
 ### [x] Read enum type
+
 ### [x] Read type aliases
+
 ### [x] Read arrays
 
 ## Create matching rules in pacts
 
 ### [x] For enums
+
 ### [x] For unions
+
 ### [x] For matchers
 
 ## Specify common matcher formats
 
 ### [x] @pact-email
+
 ### [x] @pact-date
+
 ### [x] @pact-datetime
+
 ### [x] @pact-datetime-with-millis
+
 ### [x] @pact-time
+
 ### [x] @pact-timestamp
+
 ### [x] @pact-ipv4
+
 ### [x] @pact-ipv6
+
 ### [x] @pact-hex
 
 ```ts
 interface CommentDTO {
-  id: number;
-  /** @pact-email */
-  user: string;
-  /** @pact-datetime */
-  datetime: string;
-  comment: string;
+    id: number;
+    /** @pact-email */
+    user: string;
+    /** @pact-datetime */
+    datetime: string;
+    comment: string;
+}
+```
+
+## Specify example representation of type
+
+```ts
+interface Address {
+    city: string;
+    address: string;
+    /** @pact-example "99-400" */
+    postCode: string;
 }
 ```
 
 ## Create the concept of using JavaScript decorators to get information about interaction path
 
 ```ts
-@BaseUrl("/api/v1/posts/:postId")
+@BaseUrl('/api/v1/posts/:postId')
 class PostsApi extends ApiClass {
-  
-  getPost(postId: string) {
-    const url = this.endpoint(postId);
-    return axios.get(url);
-  }
-  
-  deletePost(postId: string) {
-    const url = this.endpoint(postId);
-    return axios.delete(url);
-  }
-  
-  @PathApi("/comments")
-  getCommentsForPost(postId: string) {
-    const url = this.endpoint(postId);
-    return axios.get(url);
-  }
-  
-  @PathApi("/comments/:commentId")
-  deleteCommentsForPost(postId: string, commentId: string) {
-    const url = this.endpoint(postId, commentId);
-    return axios.get(url);
-  }
-  
+    getPost(postId: string) {
+        const url = this.endpoint(postId);
+        return axios.get(url);
+    }
+
+    deletePost(postId: string) {
+        const url = this.endpoint(postId);
+        return axios.delete(url);
+    }
+
+    @PathApi('/comments')
+    getCommentsForPost(postId: string) {
+        const url = this.endpoint(postId);
+        return axios.get(url);
+    }
+
+    @PathApi('/comments/:commentId')
+    deleteCommentsForPost(postId: string, commentId: string) {
+        const url = this.endpoint(postId, commentId);
+        return axios.get(url);
+    }
 }
 ```
 
@@ -183,7 +241,7 @@ class PostsApi extends ApiClass {
 
 ```ts
 function fetchComments(/** @pact-query */ query: Query) {
-  // ...
+    // ...
 }
 
 interface Query {
@@ -196,7 +254,7 @@ interface Query {
 
 ```ts
 function addComment(/** @pact-body */ newComment: NewComment) {
-  // ...
+    // ...
 }
 
 interface NewComment {
@@ -205,27 +263,42 @@ interface NewComment {
 }
 ```
 
-## [X] Create the concept how to get information about headers of interaction
+or
 
-In **pacts.config.js** you can specify common headers for request or response in the range of provider:
-```js
-module.exports = {
-  providers: [
-      {
-          provider: 'some-provider',
-          apiPath: '/src/api',
-          requestHeaders: {
-              authorization: 'auth',
-          },
-          responseHeaders: {
-              'Content-Type': 'application/json',
-          },
-      }
-  ],
+```ts
+function addComment(postId: string, commentContent: string) {
+    /** @pact-body */
+    const newComment = {
+        postId,
+        commentContent,
+    };
+    // ...
 }
 ```
 
+## [X] Create the concept how to get information about headers of interaction
+
+In **pacts.config.js** you can specify common headers for request or response in the range of provider:
+
+```js
+module.exports = {
+    providers: [
+        {
+            provider: 'some-provider',
+            apiPath: '/src/api',
+            requestHeaders: {
+                authorization: 'auth',
+            },
+            responseHeaders: {
+                'Content-Type': 'application/json',
+            },
+        },
+    ],
+};
+```
+
 You can also add headers by jsDocs:
+
 ```ts
 /**
  * @pact
@@ -233,6 +306,6 @@ You can also add headers by jsDocs:
  * @pact-response-header "Content-Type" "application/pdf"
  */
 function updateReport() {
-  // ...
+    // ...
 }
 ```

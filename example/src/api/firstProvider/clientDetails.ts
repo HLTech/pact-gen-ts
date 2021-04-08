@@ -67,5 +67,7 @@ interface ApplicationDetailsDto {
     /** @pact-email */
     emailString: string;
     constString: 'CONST';
+    /** @pact-example "99-400" */
+    postCode: string;
     // tupleField: [number, string]; | not allowed type
 }

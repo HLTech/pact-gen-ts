@@ -14,6 +14,7 @@ export interface ObjectRepresentation {
     isArray?: boolean;
     isEnum?: boolean;
     enumValues?: Array<number | string>;
+    exampleValue?: string;
 }
 
 export function getBasicRepresentationOfType(entryType: tsMorph.Type, source: tsMorph.Node): ObjectRepresentation {
@@ -68,6 +69,10 @@ export function getBasicRepresentationOfType(entryType: tsMorph.Type, source: ts
                     const jsDocTag = topNodeOfDeclaration!.compilerNode?.tags?.[0].tagName.escapedText;
                     const objectTypeRepresentation = jsDocTag ? getObjectTypeRepresentationForJsDocTag(jsDocTag as string) : undefined;
                     if (objectTypeRepresentation) {
+                        if (objectTypeRepresentation === 'example') {
+                            const commentOfJsDoc = topNodeOfDeclaration!.compilerNode?.tags?.[0].comment;
+                            return [propertyName, {...getBasicRepresentationOfType(propertyType, source), exampleValue: commentOfJsDoc}];
+                        }
                         return [propertyName, {objectType: objectTypeRepresentation}];
                     }
                 }
