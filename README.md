@@ -70,7 +70,9 @@ function fetchComments() {
 }
 ```
 
-### [_] Description of interaction can be optional
+### [X] Description of interaction can be optional
+
+If we do not specify description of interaction by `@pact-description`, the description is set from the name of function / variable / property.
 
 ## [x] Specify REST method of interaction
 

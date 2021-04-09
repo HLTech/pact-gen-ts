@@ -6,7 +6,6 @@ const endpoint = (clientId: string) => `/clients/${clientId}`;
 export const clientDetailsApi = {
     /**
      * @pact
-     * @pact-description "get client details"
      * @pact-method GET
      * @pact-path /api/clients/10
      */

@@ -46,6 +46,7 @@ export function getInteractionFromTsNode(node: tsMorph.Node, source: tsMorph.Nod
                     }
                     break;
                 case ts.SyntaxKind.PropertyAssignment:
+                case ts.SyntaxKind.PropertyDeclaration:
                     return (
                         node.getFirstChildByKind(ts.SyntaxKind.FunctionExpression) || node.getFirstChildByKind(ts.SyntaxKind.ArrowFunction)
                     );
@@ -111,6 +112,10 @@ export function getInteractionFromTsNode(node: tsMorph.Node, source: tsMorph.Nod
 
             if (!newInteraction.response.status) {
                 newInteraction.response.status = getDefaultResponseStatusForInteraction(newInteraction);
+            }
+            if (!newInteraction.description) {
+                const identifierNode = parentNode.getFirstChildByKindOrThrow(ts.SyntaxKind.Identifier);
+                newInteraction.description = identifierNode.getText();
             }
 
             printInteraction(newInteraction);

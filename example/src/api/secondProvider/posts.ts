@@ -7,7 +7,6 @@ const endpoint = (clientNumber: string, postId: string = '') => `/client/${clien
 export const postsApi = {
     /**
      * @pact
-     * @pact-description "get user posts"
      * @pact-path /api/clients/10/posts
      * @pact-method GET
      */
@@ -21,7 +20,6 @@ export const postsApi = {
 
     /**
      * @pact
-     * @pact-description "add new post"
      * @pact-path /api/clients/10/posts
      * @pact-method POST
      */
@@ -34,7 +32,6 @@ export const postsApi = {
 
     /**
      * @pact
-     * @pact-description "add new personal post"
      * @pact-path /api/clients/10/posts
      * @pact-method POST
      */
