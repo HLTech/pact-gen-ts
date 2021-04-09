@@ -96,7 +96,9 @@ function fetchComments() {
 }
 ```
 
-### [_] Response status can be optional argument
+### [X] Response status can be optional argument
+
+If we do not use `@pact-response-status`, the proper response status is set based on given HTTP method.
 
 ## [x] Specify api path of interaction
 
