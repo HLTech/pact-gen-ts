@@ -7,6 +7,7 @@ import {isEmptyObject} from '../utils/objectType';
 import {printInteraction} from './printInteraction';
 import qs from 'qs';
 import {Provider} from './read-pacts-config';
+import {getDefaultResponseStatusForInteraction} from './defaultResponseStatus';
 
 export interface Interaction {
     description?: string;
@@ -106,6 +107,10 @@ export function getInteractionFromTsNode(node: tsMorph.Node, source: tsMorph.Nod
                     const mapped = Object.fromEntries((matchingRules as []).map((a) => [Object.keys(a)[0], a[Object.keys(a)[0]]]));
                     newInteraction.request.matchingRules = {...mapped, ...newInteraction.request.matchingRules};
                 }
+            }
+
+            if (!newInteraction.response.status) {
+                newInteraction.response.status = getDefaultResponseStatusForInteraction(newInteraction);
             }
 
             printInteraction(newInteraction);
