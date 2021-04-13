@@ -59,13 +59,13 @@ interface ApplicationDetailsDto {
     };
     someUnionType: 'AAA' | 'BBB' | 100;
     stringAliasType: StringAlias;
-    /** @pact-datetime */
+    /** @pact-matcher iso-datetime */
     datetimeString: string;
-    /** @pact-datetime-with-millis */
+    /** @pact-matcher iso-datetime-with-millis */
     datetimeWithMillisString: string;
-    /** @pact-date */
+    /** @pact-matcher iso-date */
     dateString: string;
-    /** @pact-email */
+    /** @pact-matcher email */
     emailString: string;
     constString: 'CONST';
     /** @pact-example "99-400" */

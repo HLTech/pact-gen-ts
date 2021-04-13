@@ -55,7 +55,7 @@ export const postsApi = {
 
 interface QueryToGetPosts {
     booleanField: boolean;
-    /** @pact-date */
+    /** @pact-matcher iso-date */
     fromDate: string;
 }
 
