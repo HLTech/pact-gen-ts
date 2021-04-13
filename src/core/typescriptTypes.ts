@@ -1,4 +1,5 @@
 import * as tsMorph from 'ts-morph';
+import * as ts from 'typescript';
 
 export function getReturnTypeOfFunction(functionType: tsMorph.Type) {
     const returnType = functionType.getCallSignatures()[0].getReturnType();
@@ -76,8 +77,9 @@ export function getBasicRepresentationOfType(entryType: tsMorph.Type, source: ts
                 const propertyType = property.getTypeAtLocation(source);
                 const topNodeOfDeclaration = property.getValueDeclaration()?.getChildren()[0];
                 if (tsMorph.Node.isJSDoc(topNodeOfDeclaration)) {
-                    const jsDocTag = topNodeOfDeclaration!.compilerNode?.tags?.[0].tagName.escapedText;
-                    const objectTypeRepresentation = jsDocTag ? getObjectTypeRepresentationForJsDocTag(jsDocTag as string) : undefined;
+                    const jsDocTag = topNodeOfDeclaration.getFirstChildByKind(ts.SyntaxKind.JSDocTag);
+                    const annotation = jsDocTag?.getFirstChildByKind(ts.SyntaxKind.Identifier)?.getText();
+                    const objectTypeRepresentation = annotation === 'pact-matcher' && jsDocTag?.getComment();
                     if (objectTypeRepresentation) {
                         if (objectTypeRepresentation === 'example') {
                             const commentOfJsDoc = topNodeOfDeclaration!.compilerNode?.tags?.[0].comment;
@@ -92,10 +94,3 @@ export function getBasicRepresentationOfType(entryType: tsMorph.Type, source: ts
             return {objectType: objectRepresentation, isArray};
     }
 }
-
-const getObjectTypeRepresentationForJsDocTag = (tag: string) => {
-    if (tag.startsWith('pact-') === false) {
-        return undefined;
-    }
-    return tag.slice(5);
-};

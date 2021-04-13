@@ -172,30 +172,64 @@ function fetchComments() {
 
 ## Specify common matcher formats
 
-### [x] @pact-email
+### [x] @pact-matcher email
 
-### [x] @pact-date
+### [x] @pact-matcher iso-date
 
-### [x] @pact-datetime
+ISO8601 Date
 
-### [x] @pact-datetime-with-millis
+Example: `2021-04-13`
 
-### [x] @pact-time
+### [x] @pact-matcher iso-datetime
 
-### [x] @pact-timestamp
+ISO8601 Date and Time string
 
-### [x] @pact-ipv4
+Example: `2021-04-13T10:14:53+01:00`
 
-### [x] @pact-ipv6
+### [x] @pact-matcher iso-datetime-with-millis
 
-### [x] @pact-hex
+ISO8601 DateTime with millisecond precision
+
+Example: `2021-04-13T10:14:53.123+01:00`
+
+### [x] @pact-matcher iso-time
+
+ISO8601 Time, matches a pettern of the format "'T'HH:mm:ss"
+
+Example: `T10.14.53.342Z`
+
+### [x] @pact-matcher timestamp
+
+RFC3339 Timestamp
+
+Example: `Tue, 13 Apr 2021 10:14:53 -0400`
+
+### [x] @pact-matcher uuid
+
+UUID v4
+
+Example: `ce11b6e-d8e1-11e7-9296-cec278b6b50a`
+
+### [x] @pact-matcher ipv4
+
+Example: `127.0.0.13`
+
+### [x] @pact-matcher ipv6
+
+Example: `::ffff:192.0.2.128`
+
+### [x] @pact-matcher hex
+
+Example: `A4C3Ff`
+
+---
 
 ```ts
 interface CommentDTO {
     id: number;
-    /** @pact-email */
+    /** @pact-matcher email */
     user: string;
-    /** @pact-datetime */
+    /** @pact-matcher iso-datetime */
     datetime: string;
     comment: string;
 }
