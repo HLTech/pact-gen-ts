@@ -149,7 +149,7 @@ const getParameterOfRequestBody = (parameters: tsMorph.ParameterDeclaration[]) =
             .getFirstChildByKind(ts.SyntaxKind.JSDocComment)
             ?.getFirstChildByKind(ts.SyntaxKind.JSDocTag)
             ?.getFirstChildByKind(ts.SyntaxKind.Identifier);
-        if (jsDocIdentifierNode?.getText() === 'pact-body') {
+        if (jsDocIdentifierNode?.getText() === 'pact-request-body') {
             return parameter;
         }
     }
@@ -171,7 +171,7 @@ const getRequestBodyVariable = (bodyOfFunction: tsMorph.Block) => {
     const pactBodyJsDoc = bodyOfFunction.getDescendantsOfKind(ts.SyntaxKind.JSDocComment).find((jsDocComment) => {
         return (
             jsDocComment.getFirstChildByKind(ts.SyntaxKind.JSDocTag)?.getFirstChildByKind(ts.SyntaxKind.Identifier)?.getText() ===
-            'pact-body'
+            'pact-request-body'
         );
     });
     if (pactBodyJsDoc) {
