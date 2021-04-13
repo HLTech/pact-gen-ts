@@ -257,7 +257,7 @@ interface Query {
 ## [X] Create the concept how to get information about request body of interaction
 
 ```ts
-function addComment(/** @pact-body */ newComment: NewComment) {
+function addComment(/** @pact-request-body */ newComment: NewComment) {
     // ...
 }
 
@@ -271,7 +271,7 @@ or
 
 ```ts
 function addComment(postId: string, commentContent: string) {
-    /** @pact-body */
+    /** @pact-request-body */
     const newComment = {
         postId,
         commentContent,
