@@ -73,4 +73,6 @@ interface ApplicationDetailsDto {
     stringArray: string[];
     unionsArray: UnionType[];
     // tupleField: [number, string]; | not allowed type
+    // anyType: any; | not allowed type
+    unknownType: unknown;
 }
