@@ -79,13 +79,16 @@ export function getBasicRepresentationOfType(entryType: tsMorph.Type, source: ts
                 if (tsMorph.Node.isJSDoc(topNodeOfDeclaration)) {
                     const jsDocTag = topNodeOfDeclaration.getFirstChildByKind(ts.SyntaxKind.JSDocTag);
                     const annotation = jsDocTag?.getFirstChildByKind(ts.SyntaxKind.Identifier)?.getText();
-                    const objectTypeRepresentation = annotation === 'pact-matcher' && jsDocTag?.getComment();
-                    if (objectTypeRepresentation) {
-                        if (objectTypeRepresentation === 'example') {
-                            const commentOfJsDoc = topNodeOfDeclaration!.compilerNode?.tags?.[0].comment;
-                            return [propertyName, {...getBasicRepresentationOfType(propertyType, source), exampleValue: commentOfJsDoc}];
-                        }
-                        return [propertyName, {objectType: objectTypeRepresentation}];
+                    if (annotation === 'pact-matcher') {
+                        const objectMatcher = jsDocTag?.getComment();
+                        return [propertyName, {objectType: objectMatcher}];
+                    }
+                    if (annotation === 'pact-example') {
+                        const objectExampleRepresentation = jsDocTag?.getComment();
+                        return [
+                            propertyName,
+                            {...getBasicRepresentationOfType(propertyType, source), exampleValue: objectExampleRepresentation},
+                        ];
                     }
                 }
                 return [propertyName, getBasicRepresentationOfType(propertyType, source)];
