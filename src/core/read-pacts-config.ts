@@ -6,7 +6,7 @@ export interface PactConfig {
 
 export interface Provider {
     provider: string;
-    apiPath: string;
+    files: string[];
     requestHeaders?: Record<string, string>;
     responseHeaders?: Record<string, string>;
 }
@@ -20,13 +20,13 @@ export const readPactsConfig = (): PactConfig => {
         throw new Error('The config file is not defined properly.');
     }
 
-    if (!(config.consumer)) {
+    if (!config.consumer) {
         throw new Error('The consumer name must be specified in the config file.');
     }
 
-    if (!(config.buildDir)) {
+    if (!config.buildDir) {
         config.buildDir = 'pacts';
     }
 
     return config;
-}
+};
