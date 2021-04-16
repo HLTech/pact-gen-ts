@@ -4,7 +4,7 @@ module.exports = {
     providers: [
         {
             provider: 'first-provider',
-            apiPath: '/src/api/firstProvider',
+            files: ['src/api/firstProvider/*.ts'],
             requestHeaders: {
                 authorization: 'auth',
             },
@@ -14,10 +14,10 @@ module.exports = {
         },
         {
             provider: 'second-provider',
-            apiPath: '/src/api/secondProvider',
+            files: ['src/api/secondProvider/*.ts'],
             responseHeaders: {
                 'Content-Type': 'application/json',
             },
-        }
-    ]
+        },
+    ],
 };

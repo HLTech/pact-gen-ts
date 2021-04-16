@@ -1,12 +1,12 @@
-import {PactConfig, Provider, readPactsConfig} from "./read-pacts-config";
-import * as fs from "fs";
-import * as tsMorph from "ts-morph";
-import {getAllFilesFromDirectory} from "../utils/systemFiles";
-import {getInteractionFromTsNode, Interaction} from "./interactions";
+import {PactConfig, Provider, readPactsConfig} from './read-pacts-config';
+import * as fs from 'fs';
+import * as tsMorph from 'ts-morph';
+import {getInteractionFromTsNode, Interaction} from './interactions';
+import {glob} from 'glob';
 
 export function createPacts() {
     const pactsConfig = readPactsConfig();
-    if (!fs.existsSync((pactsConfig.buildDir))) {
+    if (!fs.existsSync(pactsConfig.buildDir)) {
         fs.mkdirSync(pactsConfig.buildDir);
     }
 
@@ -24,8 +24,8 @@ interface PactDefinition {
     metadata: {
         pactSpecification: {
             version: string;
-        }
-    }
+        };
+    };
 }
 
 function createPactForProvider(provider: Provider, pactsConfig: PactConfig) {
@@ -36,19 +36,20 @@ function createPactForProvider(provider: Provider, pactsConfig: PactConfig) {
         metadata: {pactSpecification: {version: '2.0.0'}},
     };
 
-    pactDefinition.interactions = readInteractionsFromFiles(provider.apiPath, provider);
+    pactDefinition.interactions = readInteractionsFromFiles(provider.files, provider);
 
     const resultJSON = JSON.stringify(pactDefinition, null, 2);
     const resultFilePath = `${pactsConfig.buildDir}/${pactsConfig.consumer}-${provider.provider}.json`;
     fs.writeFileSync(resultFilePath, resultJSON);
 }
 
-function readInteractionsFromFiles(directoryPathWithApi: string, provider: Provider) {
+function readInteractionsFromFiles(filesWithApiFunctions: string[], provider: Provider) {
     const interactions: Interaction[] = [];
 
     const typescriptProject = new tsMorph.Project();
     typescriptProject.addSourceFilesAtPaths('src/**/*.ts');
-    for (const file of getAllFilesFromDirectory('./' + directoryPathWithApi)) {
+    const files = glob.sync(filesWithApiFunctions.length > 1 ? `{${filesWithApiFunctions.join(',')}}` : filesWithApiFunctions[0]);
+    for (const file of files) {
         const sourceFile = typescriptProject.getSourceFileOrThrow(file);
 
         getInteractionFromTsNode(sourceFile, sourceFile, interactions, provider);

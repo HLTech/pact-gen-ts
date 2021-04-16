@@ -25,7 +25,7 @@ module.exports = {
     providers: [
         {
             provider: 'some-provider',
-            apiPath: '/src/api',
+            files: ['src/api/**/*.ts'],
         },
     ],
 };
@@ -323,7 +323,7 @@ module.exports = {
     providers: [
         {
             provider: 'some-provider',
-            apiPath: '/src/api',
+            files: ['src/api/**/*.ts'],
             requestHeaders: {
                 authorization: 'auth',
             },
