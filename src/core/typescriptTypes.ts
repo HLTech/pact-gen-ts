@@ -57,10 +57,16 @@ export function getBasicRepresentationOfType(entryType: tsMorph.Type, source: ts
     if ((entryType.isEnum() || entryType.isUnion()) && stringRepresentation !== 'boolean') {
         const enumMembers = entryType.getUnionTypes();
         const enumValues = enumMembers.map((member) => member.getLiteralValue()).filter((member) => member);
+        if (enumValues.length) {
+            return {
+                objectType: undefined,
+                enumValues: enumValues as Array<number | string>,
+                isEnum: true,
+                isArray,
+            };
+        }
         return {
-            objectType: undefined,
-            enumValues: enumValues as Array<number | string>,
-            isEnum: true,
+            ...getBasicRepresentationOfType(enumMembers[0], source),
             isArray,
         };
     }
