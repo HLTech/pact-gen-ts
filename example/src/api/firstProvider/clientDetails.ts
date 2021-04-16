@@ -75,4 +75,5 @@ interface ApplicationDetailsDto {
     // tupleField: [number, string]; | not allowed type
     // anyType: any; | not allowed type
     unknownType: unknown;
+    unionWithDifferentTypes: string | number;
 }

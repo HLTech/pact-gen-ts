@@ -56,12 +56,12 @@ export function getInteractionFromTsNode(node: tsMorph.Node, source: tsMorph.Nod
         const parentNode = node.getParent();
         const functionNode = getFunctionNode(parentNode);
         if (functionNode) {
-            let responseType = getResponseTypeFromFunctionBody(functionNode.getFirstChildByKindOrThrow(ts.SyntaxKind.Block))?.getType();
-            if (!responseType) {
+            let responseBodyType = getResponseTypeFromFunctionBody(functionNode.getFirstChildByKindOrThrow(ts.SyntaxKind.Block))?.getType();
+            if (!responseBodyType) {
                 const functionType = functionNode.getType();
-                responseType = getReturnTypeOfFunction(functionType);
+                responseBodyType = getReturnTypeOfFunction(functionType);
             }
-            const basicTypeRepresentationOfResponse = getBasicRepresentationOfType(responseType, source);
+            const basicTypeRepresentationOfResponse = getBasicRepresentationOfType(responseBodyType, source);
 
             const newInteraction = mapJsDocsIntoInteraction(node);
             newInteraction.request.headers = {...provider.requestHeaders, ...newInteraction.request.headers};
