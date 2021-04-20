@@ -1,4 +1,5 @@
 import {secondProviderAxios} from '../axios';
+import {CashDto} from '../../models/Cash';
 
 const axios = secondProviderAxios;
 const endpoint = (clientNumber: string) => `/clients/${clientNumber}/cash`;
@@ -39,8 +40,3 @@ export const CashApi = {
         return data;
     },
 };
-
-interface CashDto {
-    booleanField: boolean;
-    stringField: string;
-}
