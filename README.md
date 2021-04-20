@@ -347,3 +347,15 @@ function updateReport() {
     // ...
 }
 ```
+
+## [X] Create verbose flag
+
+Add the "verbose" flag if you want the created interactions to be displayed in the console.
+
+In **pacts.config.js**:
+
+```js
+module.exports = {
+    verbose: true,
+};
+```

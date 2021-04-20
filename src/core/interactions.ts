@@ -118,8 +118,6 @@ export function getInteractionFromTsNode(node: tsMorph.Node, source: tsMorph.Nod
                 newInteraction.description = identifierNode.getText();
             }
 
-            printInteraction(newInteraction);
-
             interactions.push(newInteraction);
 
             return;

@@ -2,6 +2,7 @@ export interface PactConfig {
     consumer: string;
     buildDir: string;
     providers: Provider[];
+    verbose?: boolean;
 }
 
 export interface Provider {

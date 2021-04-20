@@ -78,4 +78,5 @@ interface ApplicationDetailsDto {
     unionWithDifferentTypes: string | number;
     undefinedField: undefined;
     nullField: null;
+    arrayOfObjects: {someField: 'A' | 'B' | 'C'}[];
 }
