@@ -50,6 +50,7 @@ export const postsApi = {
     deletePost: function ({clientNumber, postId}: {clientNumber: string; postId: string}) {
         const url = endpoint(clientNumber, postId);
         axios.delete(url);
+        return undefined;
     },
 };
 
