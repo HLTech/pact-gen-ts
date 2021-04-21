@@ -76,4 +76,6 @@ interface ApplicationDetailsDto {
     // anyType: any; | not allowed type
     unknownType: unknown;
     unionWithDifferentTypes: string | number;
+    undefinedField: undefined;
+    nullField: null;
 }
