@@ -47,9 +47,9 @@ export const postsApi = {
      * @pact-path /api/clients/10/posts/25
      * @pact-method DELETE
      */
-    deletePost: async function ({clientNumber, postId}: {clientNumber: string; postId: string}) {
+    deletePost: function ({clientNumber, postId}: {clientNumber: string; postId: string}) {
         const url = endpoint(clientNumber, postId);
-        return axios.delete(url);
+        axios.delete(url);
     },
 };
 
