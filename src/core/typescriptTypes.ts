@@ -21,7 +21,7 @@ export interface ObjectRepresentation {
 export function getBasicRepresentationOfType(entryType: tsMorph.Type, source: tsMorph.Node): ObjectRepresentation {
     let stringRepresentation = entryType.getText(source);
 
-    if (stringRepresentation.includes('AxiosResponse<any>')) {
+    if (stringRepresentation.includes('AxiosResponse<any>') || stringRepresentation === 'void') {
         return {objectType: undefined};
     }
 
