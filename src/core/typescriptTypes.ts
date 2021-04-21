@@ -18,14 +18,15 @@ export interface ObjectRepresentation {
     exampleValue?: string;
 }
 
-export function getBasicRepresentationOfType(entryType: tsMorph.Type, source: tsMorph.Node): ObjectRepresentation {
-    let stringRepresentation = entryType.getText(source);
-
-    if (stringRepresentation.includes('AxiosResponse<any>') || stringRepresentation === 'void') {
-        return {objectType: undefined};
-    }
-
+export function getBasicRepresentationOfType(
+    entryType: tsMorph.Type,
+    source: tsMorph.Node,
+    isResponseFromFunction?: boolean,
+): ObjectRepresentation {
     if (entryType.isAny()) {
+        if (isResponseFromFunction) {
+            return {objectType: undefined};
+        }
         console.error('[ERROR]: "any" type is not allowed.');
         process.exit(1);
     }
@@ -36,6 +37,12 @@ export function getBasicRepresentationOfType(entryType: tsMorph.Type, source: ts
     }
 
     if (entryType.isUnknown()) {
+        return {objectType: undefined};
+    }
+
+    let stringRepresentation = entryType.getText(source);
+
+    if (stringRepresentation.includes('AxiosResponse<any>') || stringRepresentation === 'void') {
         return {objectType: undefined};
     }
 
