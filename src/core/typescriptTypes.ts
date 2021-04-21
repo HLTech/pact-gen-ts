@@ -36,7 +36,7 @@ export function getBasicRepresentationOfType(
         process.exit(2);
     }
 
-    if (entryType.isUnknown()) {
+    if (entryType.isUnknown() || entryType.isUndefined() || entryType.isNull()) {
         return {objectType: undefined};
     }
 
