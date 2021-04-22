@@ -425,8 +425,82 @@ Object {
     Object {
       "description": "apiFunction",
       "request": Object {
+        "body": Object {
+          "arrayOfObjects": Array [
+            Object {
+              "someField": "A",
+            },
+          ],
+          "booleanField": true,
+          "constString": "CONST",
+          "enumType": "FIRST",
+          "intersectionField": Object {
+            "fieldA": "text",
+            "fieldB": true,
+            "fieldC": 10,
+          },
+          "numberEnum": 1,
+          "numberField": 10,
+          "someAdditionalField": "text",
+          "someObject": Object {
+            "booleanField": true,
+            "numberField": 10,
+          },
+          "someOtherObject": Object {
+            "someInnerObject": Object {
+              "someNextEnum": "FIRST",
+            },
+          },
+          "someType": Object {
+            "fieldA": "text",
+            "fieldB": true,
+          },
+          "someUnionType": "AAA",
+          "stringAliasType": "text",
+          "stringArray": Array [
+            "text",
+          ],
+          "stringField": "text",
+          "unionWithDifferentTypes": "text",
+          "unionsArray": Array [
+            "OPTION_1",
+          ],
+        },
         "headers": Object {},
-        "method": "GET",
+        "matchingRules": Object {
+          "$.body": Object {
+            "match": "type",
+          },
+          "$.body.arrayOfObjects.someField": Object {
+            "match": "regex",
+            "regex": "A|B|C",
+          },
+          "$.body.constString": Object {
+            "match": "regex",
+            "regex": "CONST",
+          },
+          "$.body.enumType": Object {
+            "match": "regex",
+            "regex": "FIRST|SECOND|THIRD|OTHER",
+          },
+          "$.body.numberEnum": Object {
+            "match": "regex",
+            "regex": "1|2|3|7|8",
+          },
+          "$.body.someOtherObject.someInnerObject.someNextEnum": Object {
+            "match": "regex",
+            "regex": "FIRST|SECOND|THIRD|OTHER",
+          },
+          "$.body.someUnionType": Object {
+            "match": "regex",
+            "regex": "AAA|BBB|100",
+          },
+          "$.body.unionsArray": Object {
+            "match": "regex",
+            "regex": "OPTION_1|OPTION_2|OPTION_3",
+          },
+        },
+        "method": "POST",
         "path": "/api",
       },
       "response": Object {
@@ -504,7 +578,7 @@ Object {
             "regex": "OPTION_1|OPTION_2|OPTION_3",
           },
         },
-        "status": 200,
+        "status": 201,
       },
     },
   ],
