@@ -27,7 +27,7 @@ export const postsApi = {
         const url = endpoint(clientNumber);
         /** @pact-request-body */
         const body = {newPost};
-        return axios.post(url, newPost);
+        return axios.post(url, body);
     },
 
     /**
@@ -35,10 +35,14 @@ export const postsApi = {
      * @pact-path /api/clients/10/posts
      * @pact-method POST
      */
-    addNewPersonalPost: async function (clientNumber: string, newPost: NewPost) {
+    addNewPersonalPost: async function (clientNumber: string, newPost: NewPost, toEmail: string) {
         const url = endpoint(clientNumber);
         /** @pact-request-body */
-        const body = {personalPost: newPost};
+        const body = {
+            personalPost: newPost,
+            /** @pact-matcher email */
+            email: toEmail,
+        };
         return axios.post(url, body);
     },
 

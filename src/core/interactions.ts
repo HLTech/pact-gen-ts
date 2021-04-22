@@ -90,7 +90,7 @@ export function getInteractionFromTsNode(node: tsMorph.Node, source: tsMorph.Nod
                 if (exampleRepresentation) {
                     newInteraction.request.body = exampleRepresentation;
                 }
-                const matchingRules = changeObjectRepresentationIntoMatchingRules(basicTypeRepresentationOfResponse, '$.body');
+                const matchingRules = changeObjectRepresentationIntoMatchingRules(basicTypeRepresentationOfRequestBody, '$.body');
                 if (isEmptyObject(matchingRules) === false) {
                     const mapped = Object.fromEntries((matchingRules as []).map((a) => [Object.keys(a)[0], a[Object.keys(a)[0]]]));
                     newInteraction.request.matchingRules = {...mapped, '$.body': {match: 'type'}};

@@ -1,9 +1,11 @@
 /**
  * @pact
- * @pact-method GET
+ * @pact-method POST
  * @pact-path /api
  */
 export function apiFunction(): ResponseDto {
+    /** @pact-request-body */
+    const requestBody = {} as RequestForm;
     return {} as ResponseDto;
 }
 
@@ -57,4 +59,8 @@ interface ResponseDto {
     unknownType: unknown;
     unionWithDifferentTypes: string | number;
     arrayOfObjects: {someField: 'A' | 'B' | 'C'}[];
+}
+
+interface RequestForm extends ResponseDto {
+    someAdditionalField: string;
 }
