@@ -1,5 +1,6 @@
 import * as tsMorph from 'ts-morph';
 import * as ts from 'typescript';
+import {PACT_ANNOTATIONS} from '../consts/pact-annotations';
 
 export function getReturnTypeOfFunction(functionType: tsMorph.Type) {
     const returnType = functionType.getCallSignatures()[0].getReturnType();
@@ -92,11 +93,11 @@ export function getBasicRepresentationOfType(
                 if (tsMorph.Node.isJSDoc(topNodeOfDeclaration)) {
                     const jsDocTag = topNodeOfDeclaration.getFirstChildByKind(ts.SyntaxKind.JSDocTag);
                     const annotation = jsDocTag?.getFirstChildByKind(ts.SyntaxKind.Identifier)?.getText();
-                    if (annotation === 'pact-matcher') {
+                    if (annotation === PACT_ANNOTATIONS.PACT_MATCHER) {
                         const objectMatcher = jsDocTag?.getComment();
                         return [propertyName, {objectType: objectMatcher}];
                     }
-                    if (annotation === 'pact-example') {
+                    if (annotation === PACT_ANNOTATIONS.PACT_EXAMPLE) {
                         const objectExampleRepresentation = jsDocTag?.getComment();
                         return [
                             propertyName,

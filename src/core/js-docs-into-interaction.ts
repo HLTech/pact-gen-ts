@@ -1,6 +1,7 @@
 import * as ts from 'typescript';
 import * as tsMorph from 'ts-morph';
-import {Interaction} from "./interactions";
+import {Interaction} from './interaction-creator';
+import {PACT_ANNOTATIONS} from '../consts/pact-annotations';
 
 export function mapJsDocsIntoInteraction(jsDocNode: tsMorph.Node): Interaction {
     const newInteraction: Interaction = {request: {}, response: {}};
@@ -8,23 +9,23 @@ export function mapJsDocsIntoInteraction(jsDocNode: tsMorph.Node): Interaction {
     for (const jsDocTag of jsDocNode.getChildren()) {
         const jsDocTagElement = jsDocTag.compilerNode as ts.JSDocTag;
         switch (jsDocTagElement.tagName.escapedText as string) {
-            case 'pact-description': {
+            case PACT_ANNOTATIONS.PACT_DESCRIPTION: {
                 newInteraction.description = jsDocTagElement.comment;
                 break;
             }
-            case 'pact-method': {
+            case PACT_ANNOTATIONS.PACT_METHOD: {
                 newInteraction.request.method = jsDocTagElement.comment;
                 break;
             }
-            case 'pact-response-status': {
+            case PACT_ANNOTATIONS.PACT_RESPONSE_STATUS: {
                 newInteraction.response.status = Number(jsDocTagElement.comment);
                 break;
             }
-            case 'pact-path': {
+            case PACT_ANNOTATIONS.PACT_PATH: {
                 newInteraction.request.path = jsDocTagElement.comment;
                 break;
             }
-            case 'pact-response-header': {
+            case PACT_ANNOTATIONS.PACT_RESPONSE_HEADER: {
                 const headerValues = jsDocTagElement.comment?.split(`" "`);
                 const nameOfHeader = headerValues?.[0].substr(1);
                 const valueOfHeader = headerValues?.[1].slice(0, -1);
@@ -33,7 +34,7 @@ export function mapJsDocsIntoInteraction(jsDocNode: tsMorph.Node): Interaction {
                 }
                 break;
             }
-            case 'pact-request-header': {
+            case PACT_ANNOTATIONS.PACT_REQUEST_HEADER: {
                 const headerValues = jsDocTagElement.comment?.split(`" "`);
                 const nameOfHeader = headerValues?.[0].substr(1);
                 const valueOfHeader = headerValues?.[1].slice(0, -1);

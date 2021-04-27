@@ -1,8 +1,8 @@
-import {PactConfig, Provider, readPactsConfig} from './read-pacts-config';
+import {PactConfig, Provider} from './read-pacts-config';
 import * as tsMorph from 'ts-morph';
-import {getInteractionFromTsNode, Interaction} from './interactions';
+import {Interaction, InteractionCreator} from './interaction-creator';
 import {glob} from 'glob';
-import {printInteraction} from './printInteraction';
+import {printInteraction} from './print-interaction';
 
 export function createPacts(pactsConfig: PactConfig) {
     return pactsConfig.providers.map((provider) => ({pact: createPactForProvider(provider, pactsConfig), provider: provider.provider}));
@@ -49,7 +49,7 @@ function readInteractionsFromFiles(filesWithApiFunctions: string[], provider: Pr
     for (const file of files) {
         const sourceFile = typescriptProject.getSourceFileOrThrow(file);
 
-        getInteractionFromTsNode(sourceFile, sourceFile, interactions, provider);
+        interactions.push(...InteractionCreator.getAllInteractionsInFile(sourceFile, provider));
     }
 
     return interactions;

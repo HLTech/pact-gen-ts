@@ -1,6 +1,7 @@
 module.exports = {
     consumer: 'frontend-app',
     buildDir: 'pacts',
+    verbose: true,
     providers: [
         {
             provider: 'first-provider',

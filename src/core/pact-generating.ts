@@ -1,7 +1,7 @@
 import {createMapper} from '../utils/mapper';
-import {isEmptyObject, isLiteralObject} from '../utils/objectType';
+import {isEmptyObject, isLiteralObject} from '../utils/object-type';
 import {matchingRegexFormats} from '../utils/matchers';
-import {ObjectRepresentation} from './typescriptTypes';
+import {ObjectRepresentation} from './typescript-types';
 
 const exampleRepresentationOfType = createMapper<unknown, boolean | number | string>([
     ['boolean', true],
@@ -57,7 +57,9 @@ export const changeObjectRepresentationIntoMatchingRules = (objectRepresentation
                     return changeObjectRepresentationIntoMatchingRules(value, newLevel);
                 })
                 .filter((matchingRule) => matchingRule && !isEmptyObject(matchingRule as object)),
-        ].flatMap((a) => a);
+        ]
+            .flatMap((a) => a)
+            .reduce((allMatchingRules, matchingRule) => ({...allMatchingRules, ...matchingRule}), {});
     }
     if (objectRepresentation.isEnum) {
         return {
