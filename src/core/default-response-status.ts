@@ -1,4 +1,4 @@
-import {Interaction} from './interactions';
+import {Interaction} from './interaction-creator';
 
 export const getDefaultResponseStatusForInteraction = (interaction: Interaction) => {
     switch (interaction.request.method) {

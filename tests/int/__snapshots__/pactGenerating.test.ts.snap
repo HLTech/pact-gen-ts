@@ -282,6 +282,9 @@ Object {
       "request": Object {
         "headers": Object {},
         "matchingRules": Object {
+          "$.query": Object {
+            "match": "type",
+          },
           "$.query.enumType": Object {
             "match": "regex",
             "regex": "FIRST|SECOND|THIRD|OTHER",
@@ -312,8 +315,30 @@ Object {
       "description": "secondApiFunction",
       "request": Object {
         "headers": Object {},
+        "matchingRules": Object {
+          "$.query": Object {
+            "match": "type",
+          },
+          "$.query.enumType": Object {
+            "match": "regex",
+            "regex": "FIRST|SECOND|THIRD|OTHER",
+          },
+          "$.query.isoDateField": Object {
+            "match": "regex",
+            "regex": "^([\\\\+-]?\\\\d{4}(?!\\\\d{2}\\\\b))((-?)((0[1-9]|1[0-2])(\\\\3([12]\\\\d|0[1-9]|3[01]))?|W([0-4]\\\\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\\\\d|[12]\\\\d{2}|3([0-5]\\\\d|6[1-6])))?)$",
+          },
+          "$.query.isoDatetimeWithMillisField": Object {
+            "match": "regex",
+            "regex": "^\\\\d{4}-[01]\\\\d-[0-3]\\\\dT[0-2]\\\\d:[0-5]\\\\d:[0-5]\\\\d\\\\.\\\\d+([+-][0-2]\\\\d(:?[0-5]\\\\d)?|Z)$",
+          },
+          "$.query.someUnionType": Object {
+            "match": "regex",
+            "regex": "AAA|BBB|100",
+          },
+        },
         "method": "GET",
         "path": "/api/second",
+        "query": "stringField=text&numberField=10&booleanField=true&someObject%5BbooleanField%5D=true&someObject%5BnumberField%5D=10&someUnionType=AAA&enumType=FIRST&stringArray%5B0%5D=text&isoDateField=2013-02-01&isoDatetimeWithMillisField=2015-08-06T16%3A53%3A10.123%2B01%3A00",
       },
       "response": Object {
         "headers": Object {},

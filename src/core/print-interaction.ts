@@ -1,4 +1,4 @@
-import {Interaction} from "./interactions";
+import {Interaction} from './interaction-creator';
 
 export function printInteraction(interaction: Interaction) {
     const {description, request, response} = interaction;

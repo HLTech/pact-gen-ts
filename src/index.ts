@@ -1,5 +1,5 @@
 import {createPacts} from './core/create-pacts';
-import {writeToFile} from './utils/writeToFile';
+import {writeToFile} from './utils/write-to-file';
 import {readPactsConfig} from './core/read-pacts-config';
 
 export function run(process: NodeJS.Process) {
