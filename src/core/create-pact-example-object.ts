@@ -1,6 +1,5 @@
 import {createMapper} from '../utils/mapper';
-import {isEmptyObject, isLiteralObject} from '../utils/object-type';
-import {matchingRegexFormats} from '../utils/matchers';
+import {isLiteralObject} from '../utils/object-type';
 import {ObjectRepresentation} from './typescript-types';
 
 const exampleRepresentationOfType = createMapper<unknown, boolean | number | string>([
@@ -46,37 +45,4 @@ export const changeObjectRepresentationIntoExample = (objectRepresentation: Obje
         );
     }
     return exampleRepresentationOfType(objectRepresentation.objectType);
-};
-
-export const changeObjectRepresentationIntoMatchingRules = (objectRepresentation: ObjectRepresentation, level: string): object => {
-    if (isLiteralObject(objectRepresentation.objectType)) {
-        return [
-            ...Object.entries(objectRepresentation.objectType)
-                .map(([key, value]) => {
-                    const newLevel = `${level}.${key}`;
-                    return changeObjectRepresentationIntoMatchingRules(value, newLevel);
-                })
-                .filter((matchingRule) => matchingRule && !isEmptyObject(matchingRule as object)),
-        ]
-            .flatMap((a) => a)
-            .reduce((allMatchingRules, matchingRule) => ({...allMatchingRules, ...matchingRule}), {});
-    }
-    if (objectRepresentation.isEnum) {
-        return {
-            [level]: {
-                match: 'regex',
-                regex: objectRepresentation.enumValues!.join('|'),
-            },
-        };
-    }
-    const matchedFormat = matchingRegexFormats[objectRepresentation.objectType || ''];
-    if (matchedFormat) {
-        return {
-            [level]: {
-                match: 'regex',
-                regex: matchedFormat,
-            },
-        };
-    }
-    return {};
 };

@@ -113,6 +113,143 @@ Object {
 }
 `;
 
+exports[`createPacts matching-rules 1`] = `
+Object {
+  "consumer": Object {
+    "name": "consumer-name",
+  },
+  "interactions": Array [
+    Object {
+      "description": "apiWithStringEnumResponseFunction",
+      "request": Object {
+        "headers": Object {},
+        "method": "GET",
+        "path": "/api/one",
+      },
+      "response": Object {
+        "body": "ONE",
+        "headers": Object {},
+        "matchingRules": Object {
+          "$.body": Object {
+            "match": "regex",
+            "regex": "ONE|TWO|THREE",
+          },
+        },
+        "status": 200,
+      },
+    },
+    Object {
+      "description": "apiWithAllMatchingRules",
+      "request": Object {
+        "headers": Object {},
+        "method": "GET",
+        "path": "/api/two",
+      },
+      "response": Object {
+        "body": Object {
+          "arrayOfEnums": Array [
+            "ONE",
+          ],
+          "emailField": "email@example.com",
+          "enumField": "ONE",
+          "hexField": "3F",
+          "ipv4Field": "127.0.0.13",
+          "ipv6Field": "::ffff:192.0.2.128",
+          "isoDateField": "2013-02-01",
+          "isoDatetimeField": "2015-08-06T16:53:10+01:00",
+          "isoDatetimeWithMillisField": "2015-08-06T16:53:10.123+01:00",
+          "isoTimeField": "T22:44:30.652Z",
+          "literalOptions": "AAA",
+          "nestedObject": Object {
+            "arrayOfEnums": Array [
+              "ONE",
+            ],
+            "enumField": "ONE",
+          },
+          "timestampField": "Mon, 31 Oct 2016 15:21:14 -0400",
+          "uuidField": "ce118b6e-d8e1-11e7-9296-cec278b6b50a",
+        },
+        "headers": Object {},
+        "matchingRules": Object {
+          "$.body": Object {
+            "match": "type",
+          },
+          "$.body.arrayOfEnums": Object {
+            "match": "regex",
+            "regex": "ONE|TWO|THREE",
+          },
+          "$.body.emailField": Object {
+            "match": "regex",
+            "regex": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$",
+          },
+          "$.body.enumField": Object {
+            "match": "regex",
+            "regex": "ONE|TWO|THREE",
+          },
+          "$.body.hexField": Object {
+            "match": "regex",
+            "regex": "^[0-9a-fA-F]+$",
+          },
+          "$.body.ipv4Field": Object {
+            "match": "regex",
+            "regex": "^(\\\\d{1,3}\\\\.)+\\\\d{1,3}$",
+          },
+          "$.body.ipv6Field": Object {
+            "match": "regex",
+            "regex": "^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$",
+          },
+          "$.body.isoDateField": Object {
+            "match": "regex",
+            "regex": "^([\\\\+-]?\\\\d{4}(?!\\\\d{2}\\\\b))((-?)((0[1-9]|1[0-2])(\\\\3([12]\\\\d|0[1-9]|3[01]))?|W([0-4]\\\\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\\\\d|[12]\\\\d{2}|3([0-5]\\\\d|6[1-6])))?)$",
+          },
+          "$.body.isoDatetimeField": Object {
+            "match": "regex",
+            "regex": "^\\\\d{4}-[01]\\\\d-[0-3]\\\\dT[0-2]\\\\d:[0-5]\\\\d:[0-5]\\\\d([+-][0-2]\\\\d:[0-5]\\\\d|Z)$",
+          },
+          "$.body.isoDatetimeWithMillisField": Object {
+            "match": "regex",
+            "regex": "^\\\\d{4}-[01]\\\\d-[0-3]\\\\dT[0-2]\\\\d:[0-5]\\\\d:[0-5]\\\\d\\\\.\\\\d+([+-][0-2]\\\\d(:?[0-5]\\\\d)?|Z)$",
+          },
+          "$.body.isoTimeField": Object {
+            "match": "regex",
+            "regex": "^(T\\\\d\\\\d:\\\\d\\\\d(:\\\\d\\\\d)?(\\\\.\\\\d+)?(([+-]\\\\d\\\\d:\\\\d\\\\d)|Z)?)?$",
+          },
+          "$.body.literalOptions": Object {
+            "match": "regex",
+            "regex": "AAA|BBB|CCC",
+          },
+          "$.body.nestedObject.arrayOfEnums": Object {
+            "match": "regex",
+            "regex": "ONE|TWO|THREE",
+          },
+          "$.body.nestedObject.enumField": Object {
+            "match": "regex",
+            "regex": "ONE|TWO|THREE",
+          },
+          "$.body.timestampField": Object {
+            "match": "regex",
+            "regex": "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun),\\\\s\\\\d{2}\\\\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\\\s\\\\d{4}\\\\s\\\\d{2}:\\\\d{2}:\\\\d{2}\\\\s(\\\\+|-)\\\\d{4}$",
+          },
+          "$.body.uuidField": Object {
+            "match": "regex",
+            "regex": "^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$",
+          },
+        },
+        "status": 200,
+      },
+    },
+  ],
+  "metadata": Object {
+    "pactSpecification": Object {
+      "version": "2.0.0",
+    },
+  },
+  "provider": Object {
+    "name": "provider-name",
+  },
+}
+`;
+
 exports[`createPacts pact-example 1`] = `
 Object {
   "consumer": Object {
