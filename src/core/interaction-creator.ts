@@ -2,12 +2,12 @@ import * as ts from 'typescript';
 import * as tsMorph from 'ts-morph';
 import {mapJsDocsIntoInteraction} from './js-docs-into-interaction';
 import {getBasicRepresentationOfType, getReturnTypeOfFunction} from './typescript-types';
-import {changeObjectRepresentationIntoExample, changeObjectRepresentationIntoMatchingRules} from './pact-generating';
-import {isEmptyObject} from '../utils/object-type';
+import {changeObjectRepresentationIntoExample} from './create-pact-example-object';
 import qs from 'qs';
 import {Provider} from './read-pacts-config';
 import {getDefaultResponseStatusForInteraction} from './default-response-status';
 import {PACT_ANNOTATIONS} from '../consts/pact-annotations';
+import {changeObjectRepresentationIntoMatchingRules} from './create-pact-matching-rules';
 
 export interface Interaction {
     description?: string;
@@ -86,10 +86,7 @@ export class InteractionCreator {
         const basicTypeRepresentationOfResponse = getBasicRepresentationOfType(responseBodyType, this.sourceFile, true);
         return {
             body: changeObjectRepresentationIntoExample(basicTypeRepresentationOfResponse),
-            matchingRules: mapMatchingRepresentation(
-                changeObjectRepresentationIntoMatchingRules(basicTypeRepresentationOfResponse, '$.body'),
-                '$.body',
-            ),
+            matchingRules: changeObjectRepresentationIntoMatchingRules(basicTypeRepresentationOfResponse, '$.body'),
         };
     };
 
@@ -102,10 +99,7 @@ export class InteractionCreator {
             const basicTypeRepresentationOfRequestBody = getBasicRepresentationOfType(requestBodyElementType, this.sourceFile);
             return {
                 body: changeObjectRepresentationIntoExample(basicTypeRepresentationOfRequestBody),
-                matchingRules: mapMatchingRepresentation(
-                    changeObjectRepresentationIntoMatchingRules(basicTypeRepresentationOfRequestBody, '$.body'),
-                    '$.body',
-                ),
+                matchingRules: changeObjectRepresentationIntoMatchingRules(basicTypeRepresentationOfRequestBody, '$.body'),
             };
         }
     };
@@ -120,10 +114,7 @@ export class InteractionCreator {
             const exampleRepresentationOfQueryObject = changeObjectRepresentationIntoExample(basicTypeRepresentationOfRequestBody);
             return {
                 query: qs.stringify(exampleRepresentationOfQueryObject),
-                matchingRules: mapMatchingRepresentation(
-                    changeObjectRepresentationIntoMatchingRules(basicTypeRepresentationOfRequestBody, '$.query'),
-                    '$.query',
-                ),
+                matchingRules: changeObjectRepresentationIntoMatchingRules(basicTypeRepresentationOfRequestBody, '$.query'),
             };
         }
     };
@@ -198,9 +189,3 @@ export class InteractionCreator {
         }
     };
 }
-
-const mapMatchingRepresentation = (matchingRules: object, level: string) => {
-    if (isEmptyObject(matchingRules) === false) {
-        return {...matchingRules, [level]: {match: 'type'}};
-    }
-};

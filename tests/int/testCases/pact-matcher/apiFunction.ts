@@ -3,11 +3,11 @@
  * @pact-method GET
  * @pact-path /api
  */
-export function apiFunction(): SomeType {
+export function apiFunction(): PactMatchersType {
     return {};
 }
 
-interface SomeType {
+export interface PactMatchersType {
     /** @pact-matcher email */
     emailField?: string;
     /** @pact-matcher iso-date */

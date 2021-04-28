@@ -12,6 +12,7 @@ describe('createPacts', () => {
         'pact-response-body',
         'type-analysis',
         'axios',
+        'matching-rules',
     ])('%s', (testCase) => {
         const pactsConfig = pactsConfigFactory(testCase);
 

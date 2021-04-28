@@ -55,7 +55,25 @@ export const postsApi = {
         const url = endpoint(clientNumber, postId);
         return axios.delete(url);
     },
+
+    /**
+     * @pact
+     * @pact-path /api/clients/10/posts/25/status
+     * @pact-method GET
+     */
+    getStatusOfPost: async function ({clientNumber, postId}: {clientNumber: string; postId: string}) {
+        const url = endpoint(clientNumber, postId) + '/status';
+        const {data} = await axios.get<POST_STATUSES>(url);
+        return data;
+    },
 };
+
+enum POST_STATUSES {
+    ACTIVE = 'ACTIVE',
+    ARCHIVED = 'ARCHIVED',
+    READ_ONLY = 'READ_ONLY',
+    BLOCKED = 'BLOCKED',
+}
 
 interface QueryToGetPosts {
     booleanField: boolean;
