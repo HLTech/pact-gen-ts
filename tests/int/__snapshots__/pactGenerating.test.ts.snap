@@ -250,6 +250,128 @@ Object {
 }
 `;
 
+exports[`createPacts different-functions 1`] = `
+Object {
+  "consumer": Object {
+    "name": "consumer-name",
+  },
+  "interactions": Array [
+    Object {
+      "description": "standardFunction",
+      "request": Object {
+        "headers": Object {},
+        "method": "GET",
+        "path": "/api/standard",
+      },
+      "response": Object {
+        "body": "text",
+        "headers": Object {},
+        "status": 200,
+      },
+    },
+    Object {
+      "description": "arrowFunction",
+      "request": Object {
+        "headers": Object {},
+        "method": "GET",
+        "path": "/api/arrow",
+      },
+      "response": Object {
+        "body": "text",
+        "headers": Object {},
+        "status": 200,
+      },
+    },
+    Object {
+      "description": "objectPropertyFunction",
+      "request": Object {
+        "headers": Object {},
+        "method": "GET",
+        "path": "/api/object/property/function",
+      },
+      "response": Object {
+        "body": "text",
+        "headers": Object {},
+        "status": 200,
+      },
+    },
+    Object {
+      "description": "objectPropertyArrowFunction",
+      "request": Object {
+        "headers": Object {},
+        "method": "GET",
+        "path": "/api/object/property/arrow",
+      },
+      "response": Object {
+        "body": "text",
+        "headers": Object {},
+        "status": 200,
+      },
+    },
+    Object {
+      "description": "objectPropertyAssigmentFunction",
+      "request": Object {
+        "headers": Object {},
+        "method": "GET",
+        "path": "/api/object/property/assigment-function",
+      },
+      "response": Object {
+        "body": "text",
+        "headers": Object {},
+        "status": 200,
+      },
+    },
+    Object {
+      "description": "classMethodFunction",
+      "request": Object {
+        "headers": Object {},
+        "method": "GET",
+        "path": "/api/class/method",
+      },
+      "response": Object {
+        "body": "text",
+        "headers": Object {},
+        "status": 200,
+      },
+    },
+    Object {
+      "description": "classPropertyArrowFunction",
+      "request": Object {
+        "headers": Object {},
+        "method": "GET",
+        "path": "/api/class/property/arrow",
+      },
+      "response": Object {
+        "body": "text",
+        "headers": Object {},
+        "status": 200,
+      },
+    },
+    Object {
+      "description": "classPropertyAssigmentFunction",
+      "request": Object {
+        "headers": Object {},
+        "method": "GET",
+        "path": "/api/class/property/assigment-function",
+      },
+      "response": Object {
+        "body": "text",
+        "headers": Object {},
+        "status": 200,
+      },
+    },
+  ],
+  "metadata": Object {
+    "pactSpecification": Object {
+      "version": "2.0.0",
+    },
+  },
+  "provider": Object {
+    "name": "provider-name",
+  },
+}
+`;
+
 exports[`createPacts pact-example 1`] = `
 Object {
   "consumer": Object {
