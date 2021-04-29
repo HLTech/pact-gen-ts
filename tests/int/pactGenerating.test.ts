@@ -13,6 +13,7 @@ describe('createPacts', () => {
         'type-analysis',
         'axios',
         'matching-rules',
+        'different-functions',
     ])('%s', (testCase) => {
         const pactsConfig = pactsConfigFactory(testCase);
 

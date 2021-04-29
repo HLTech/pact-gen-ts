@@ -54,7 +54,7 @@ export class InteractionCreator {
         if (apiFunctionNode) {
             const newInteraction = mapJsDocsIntoInteraction(pactJsDoc);
             newInteraction.response.status ||= getDefaultResponseStatusForInteraction(newInteraction);
-            newInteraction.description ||= nodeWithUsagePactJsDoc.getFirstChildByKind(ts.SyntaxKind.Identifier)?.getText();
+            newInteraction.description ||= InteractionCreator.getNameOfFunction(nodeWithUsagePactJsDoc);
 
             newInteraction.request.headers = {...this.provider.requestHeaders, ...newInteraction.request.headers};
             newInteraction.response.headers = {...this.provider.responseHeaders, ...newInteraction.response.headers};
@@ -125,9 +125,10 @@ export class InteractionCreator {
             case ts.SyntaxKind.MethodDeclaration:
                 return node;
             case ts.SyntaxKind.VariableDeclaration:
+            case ts.SyntaxKind.VariableStatement:
                 const variableDeclarationNode = node
                     .getFirstChildByKind(ts.SyntaxKind.VariableDeclarationList)
-                    ?.getFirstChildByKind(ts.SyntaxKind.VariableDeclaration);
+                    ?.getFirstDescendantByKind(ts.SyntaxKind.VariableDeclaration);
                 if (variableDeclarationNode) {
                     return (
                         variableDeclarationNode.getFirstChildByKind(ts.SyntaxKind.FunctionDeclaration) ||
@@ -138,6 +139,18 @@ export class InteractionCreator {
             case ts.SyntaxKind.PropertyAssignment:
             case ts.SyntaxKind.PropertyDeclaration:
                 return node.getFirstChildByKind(ts.SyntaxKind.FunctionExpression) || node.getFirstChildByKind(ts.SyntaxKind.ArrowFunction);
+        }
+    };
+
+    private static getNameOfFunction = (nodeWithFunction: tsMorph.Node): string => {
+        if (nodeWithFunction.getKind() === ts.SyntaxKind.VariableStatement) {
+            return nodeWithFunction
+                .getFirstChildByKindOrThrow(ts.SyntaxKind.VariableDeclarationList)
+                .getFirstDescendantByKindOrThrow(ts.SyntaxKind.VariableDeclaration)
+                .getFirstChildByKindOrThrow(ts.SyntaxKind.Identifier)
+                .getText();
+        } else {
+            return nodeWithFunction.getFirstChildByKindOrThrow(ts.SyntaxKind.Identifier)?.getText();
         }
     };
 
