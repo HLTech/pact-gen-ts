@@ -59,6 +59,7 @@ interface ResponseDto {
     unknownType: unknown;
     unionWithDifferentTypes: string | number;
     arrayOfObjects: {someField: 'A' | 'B' | 'C'}[];
+    optionalConstString: 'CONST' | undefined;
 }
 
 interface RequestForm extends ResponseDto {

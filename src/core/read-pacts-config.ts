@@ -1,11 +1,11 @@
 export interface PactConfig {
     consumer: string;
     buildDir: string;
-    providers: Provider[];
+    providers: ProviderConfig[];
     verbose?: boolean;
 }
 
-export interface Provider {
+export interface ProviderConfig {
     provider: string;
     files: string[];
     requestHeaders?: Record<string, string>;

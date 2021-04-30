@@ -1,10 +1,10 @@
 import * as ts from 'typescript';
 import * as tsMorph from 'ts-morph';
 import {mapJsDocsIntoInteraction} from './js-docs-into-interaction';
-import {getBasicRepresentationOfType, getReturnTypeOfFunction} from './typescript-types';
+import {getTypeRepresentation} from './type-representation';
 import {changeObjectRepresentationIntoExample} from './create-pact-example-object';
 import qs from 'qs';
-import {Provider} from './read-pacts-config';
+import {ProviderConfig} from './read-pacts-config';
 import {getDefaultResponseStatusForInteraction} from './default-response-status';
 import {PACT_ANNOTATIONS} from '../consts/pact-annotations';
 import {changeObjectRepresentationIntoMatchingRules} from './create-pact-matching-rules';
@@ -28,9 +28,9 @@ export interface Interaction {
 }
 
 export class InteractionCreator {
-    constructor(private readonly sourceFile: tsMorph.Node, private readonly provider: Provider) {}
+    constructor(private readonly sourceFile: tsMorph.SourceFile, private readonly provider: ProviderConfig) {}
 
-    public static getAllInteractionsInFile(sourceFile: tsMorph.Node, provider: Provider) {
+    public static getAllInteractionsInFile(sourceFile: tsMorph.SourceFile, provider: ProviderConfig) {
         return new InteractionCreator(sourceFile, provider).findAllInteractions();
     }
 
@@ -79,11 +79,10 @@ export class InteractionCreator {
 
     private getResponseBodyForApiFunction = (apiFunctionNode: tsMorph.Node) => {
         const functionBody = apiFunctionNode.getFirstChildByKindOrThrow(ts.SyntaxKind.Block);
-        let responseBodyType = InteractionCreator.getResponseTypeFromFunctionBody(functionBody);
-        if (responseBodyType === undefined) {
-            responseBodyType = getReturnTypeOfFunction(apiFunctionNode.getType());
-        }
-        const basicTypeRepresentationOfResponse = getBasicRepresentationOfType(responseBodyType, this.sourceFile, true);
+        const responseBodyType =
+            InteractionCreator.getResponseTypeFromFunctionBody(functionBody) ||
+            InteractionCreator.getReturnTypeOfFunction(apiFunctionNode.getType());
+        const basicTypeRepresentationOfResponse = getTypeRepresentation(responseBodyType, this.sourceFile, true);
         return {
             body: changeObjectRepresentationIntoExample(basicTypeRepresentationOfResponse),
             matchingRules: changeObjectRepresentationIntoMatchingRules(basicTypeRepresentationOfResponse, '$.body'),
@@ -96,7 +95,7 @@ export class InteractionCreator {
             InteractionCreator.getVariableWithJsDocFromFunction(apiFunctionNode, PACT_ANNOTATIONS.PACT_REQUEST_BODY);
         if (requestBodyElement) {
             const requestBodyElementType = requestBodyElement.getType();
-            const basicTypeRepresentationOfRequestBody = getBasicRepresentationOfType(requestBodyElementType, this.sourceFile);
+            const basicTypeRepresentationOfRequestBody = getTypeRepresentation(requestBodyElementType, this.sourceFile);
             return {
                 body: changeObjectRepresentationIntoExample(basicTypeRepresentationOfRequestBody),
                 matchingRules: changeObjectRepresentationIntoMatchingRules(basicTypeRepresentationOfRequestBody, '$.body'),
@@ -110,7 +109,7 @@ export class InteractionCreator {
             InteractionCreator.getVariableWithJsDocFromFunction(apiFunctionNode, PACT_ANNOTATIONS.PACT_QUERY);
         if (queryElement) {
             const queryElementType = queryElement.getType();
-            const basicTypeRepresentationOfRequestBody = getBasicRepresentationOfType(queryElementType, this.sourceFile);
+            const basicTypeRepresentationOfRequestBody = getTypeRepresentation(queryElementType, this.sourceFile);
             const exampleRepresentationOfQueryObject = changeObjectRepresentationIntoExample(basicTypeRepresentationOfRequestBody);
             return {
                 query: qs.stringify(exampleRepresentationOfQueryObject),
@@ -165,6 +164,14 @@ export class InteractionCreator {
             const variableStatementNode = responseBodyJsDoc.getParent();
             return variableStatementNode.getFirstDescendantByKind(ts.SyntaxKind.VariableDeclaration)?.getType();
         }
+    };
+
+    private static getReturnTypeOfFunction = (functionType: tsMorph.Type) => {
+        const returnType = functionType.getCallSignatures()[0].getReturnType();
+        if (returnType.getTargetType()?.getText() === 'Promise<T>') {
+            return returnType.getTypeArguments()[0];
+        }
+        return returnType;
     };
 
     private static getParameterWithJsDocFromFunction = (

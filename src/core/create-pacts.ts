@@ -1,4 +1,4 @@
-import {PactConfig, Provider} from './read-pacts-config';
+import {PactConfig, ProviderConfig} from './read-pacts-config';
 import * as tsMorph from 'ts-morph';
 import {Interaction, InteractionCreator} from './interaction-creator';
 import {glob} from 'glob';
@@ -23,7 +23,7 @@ interface PactDefinition {
     };
 }
 
-function createPactForProvider(provider: Provider, pactsConfig: PactConfig) {
+function createPactForProvider(provider: ProviderConfig, pactsConfig: PactConfig) {
     const pactDefinition: PactDefinition = {
         consumer: {name: pactsConfig.consumer},
         provider: {name: provider.provider},
@@ -40,7 +40,7 @@ function createPactForProvider(provider: Provider, pactsConfig: PactConfig) {
     return JSON.stringify(pactDefinition, null, 2);
 }
 
-function readInteractionsFromFiles(filesWithApiFunctions: string[], provider: Provider) {
+function readInteractionsFromFiles(filesWithApiFunctions: string[], provider: ProviderConfig) {
     const interactions: Interaction[] = [];
 
     const typescriptProject = new tsMorph.Project();

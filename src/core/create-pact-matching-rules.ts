@@ -1,15 +1,15 @@
-import {ObjectRepresentation} from './typescript-types';
 import {isEmptyObject, isLiteralObject} from '../utils/object-type';
-import {matchingRegexFormats} from '../utils/matchers';
+import {TypeRepresentation} from './type-representation';
+import {matchingRegexFormats} from '../consts/matching-regex-formats';
 
 type MatchingRules = Record<string, {match: 'regex' | 'type'; regex?: string}>;
 
-export const changeObjectRepresentationIntoMatchingRules = (objectRepresentation: ObjectRepresentation, level: string) => {
+export const changeObjectRepresentationIntoMatchingRules = (objectRepresentation: TypeRepresentation, level: string) => {
     const matchingRules: MatchingRules = {};
 
-    const findAllMatchingRulesRecursive = (objectRepresentation: ObjectRepresentation, currentLevel: string) => {
-        if (isLiteralObject(objectRepresentation.objectType)) {
-            Object.entries(objectRepresentation.objectType).forEach(([fieldName, fieldObjectRepresentation]) =>
+    const findAllMatchingRulesRecursive = (objectRepresentation: TypeRepresentation, currentLevel: string) => {
+        if (isLiteralObject(objectRepresentation.type)) {
+            Object.entries(objectRepresentation.type).forEach(([fieldName, fieldObjectRepresentation]) =>
                 findAllMatchingRulesRecursive(fieldObjectRepresentation, `${currentLevel}.${fieldName}`),
             );
         } else if (objectRepresentation.isEnum) {
@@ -18,7 +18,7 @@ export const changeObjectRepresentationIntoMatchingRules = (objectRepresentation
                 regex: objectRepresentation.enumValues?.join('|'),
             };
         } else {
-            const matchedFormat = matchingRegexFormats[objectRepresentation.objectType || ''];
+            const matchedFormat = matchingRegexFormats[objectRepresentation.type || ''];
             if (matchedFormat) {
                 matchingRules[currentLevel] = {
                     match: 'regex',
