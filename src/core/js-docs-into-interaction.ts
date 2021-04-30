@@ -3,30 +3,29 @@ import * as tsMorph from 'ts-morph';
 import {Interaction} from './interaction-creator';
 import {PACT_ANNOTATIONS} from '../consts/pact-annotations';
 
-export function mapJsDocsIntoInteraction(jsDocNode: tsMorph.Node): Interaction {
+export function mapJsDocsIntoInteraction(jsDocNode: tsMorph.JSDoc): Interaction {
     const newInteraction: Interaction = {request: {}, response: {}};
 
-    for (const jsDocTag of jsDocNode.getChildren()) {
-        const jsDocTagElement = jsDocTag.compilerNode as ts.JSDocTag;
-        switch (jsDocTagElement.tagName.escapedText as string) {
+    for (const jsDocTag of jsDocNode.getChildrenOfKind(ts.SyntaxKind.JSDocTag)) {
+        switch (jsDocTag.getFirstChildByKind(ts.SyntaxKind.Identifier)?.getText()) {
             case PACT_ANNOTATIONS.PACT_DESCRIPTION: {
-                newInteraction.description = jsDocTagElement.comment;
+                newInteraction.description = jsDocTag.getComment();
                 break;
             }
             case PACT_ANNOTATIONS.PACT_METHOD: {
-                newInteraction.request.method = jsDocTagElement.comment;
+                newInteraction.request.method = jsDocTag.getComment();
                 break;
             }
             case PACT_ANNOTATIONS.PACT_RESPONSE_STATUS: {
-                newInteraction.response.status = Number(jsDocTagElement.comment);
+                newInteraction.response.status = Number(jsDocTag.getComment());
                 break;
             }
             case PACT_ANNOTATIONS.PACT_PATH: {
-                newInteraction.request.path = jsDocTagElement.comment;
+                newInteraction.request.path = jsDocTag.getComment();
                 break;
             }
             case PACT_ANNOTATIONS.PACT_RESPONSE_HEADER: {
-                const headerValues = jsDocTagElement.comment?.split(`" "`);
+                const headerValues = jsDocTag.getComment()?.split(`" "`);
                 const nameOfHeader = headerValues?.[0].substr(1);
                 const valueOfHeader = headerValues?.[1].slice(0, -1);
                 if (nameOfHeader && valueOfHeader) {
@@ -35,7 +34,7 @@ export function mapJsDocsIntoInteraction(jsDocNode: tsMorph.Node): Interaction {
                 break;
             }
             case PACT_ANNOTATIONS.PACT_REQUEST_HEADER: {
-                const headerValues = jsDocTagElement.comment?.split(`" "`);
+                const headerValues = jsDocTag.getComment()?.split(`" "`);
                 const nameOfHeader = headerValues?.[0].substr(1);
                 const valueOfHeader = headerValues?.[1].slice(0, -1);
                 if (nameOfHeader && valueOfHeader) {

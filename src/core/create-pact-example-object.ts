@@ -1,6 +1,6 @@
 import {createMapper} from '../utils/mapper';
 import {isLiteralObject} from '../utils/object-type';
-import {ObjectRepresentation} from './typescript-types';
+import {TypeRepresentation} from './type-representation';
 
 const exampleRepresentationOfType = createMapper<unknown, boolean | number | string>([
     ['boolean', true],
@@ -18,7 +18,7 @@ const exampleRepresentationOfType = createMapper<unknown, boolean | number | str
     ['hex', '3F'],
 ]);
 
-export const changeObjectRepresentationIntoExample = (objectRepresentation: ObjectRepresentation): unknown => {
+export const changeObjectRepresentationIntoExample = (objectRepresentation: TypeRepresentation): unknown => {
     if (objectRepresentation.isArray) {
         return [
             changeObjectRepresentationIntoExample({
@@ -31,7 +31,7 @@ export const changeObjectRepresentationIntoExample = (objectRepresentation: Obje
         return objectRepresentation.enumValues![0];
     }
     if (objectRepresentation.exampleValue) {
-        if (objectRepresentation.objectType === 'number') {
+        if (objectRepresentation.type === 'number') {
             return Number(objectRepresentation.exampleValue);
         }
         if (objectRepresentation.exampleValue.startsWith('"') && objectRepresentation.exampleValue.endsWith('"')) {
@@ -39,10 +39,10 @@ export const changeObjectRepresentationIntoExample = (objectRepresentation: Obje
         }
         return objectRepresentation.exampleValue;
     }
-    if (isLiteralObject(objectRepresentation.objectType)) {
+    if (isLiteralObject(objectRepresentation.type)) {
         return Object.fromEntries(
-            Object.entries(objectRepresentation.objectType).map(([key, value]) => [key, changeObjectRepresentationIntoExample(value)]),
+            Object.entries(objectRepresentation.type).map(([key, value]) => [key, changeObjectRepresentationIntoExample(value)]),
         );
     }
-    return exampleRepresentationOfType(objectRepresentation.objectType);
+    return exampleRepresentationOfType(objectRepresentation.type);
 };

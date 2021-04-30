@@ -28,4 +28,12 @@ export interface PactMatchersType {
     ipv6Field?: string;
     /** @pact-matcher hex */
     hexField?: string;
+    /**
+     * @pact-matcher email
+     * @pact-example "user@google.pl"
+     */
+    matcherWithExample1?: string;
+    /** @pact-matcher hex */
+    /** @pact-example "FFFFFF" */
+    matcherWithExample2?: string;
 }
