@@ -27,9 +27,11 @@ export const changeObjectRepresentationIntoExample = (objectRepresentation: Type
             }),
         ];
     }
+
     if (objectRepresentation.isEnum) {
         return objectRepresentation.enumValues![0];
     }
+
     if (objectRepresentation.exampleValue) {
         if (objectRepresentation.type === 'number') {
             return Number(objectRepresentation.exampleValue);
@@ -39,10 +41,12 @@ export const changeObjectRepresentationIntoExample = (objectRepresentation: Type
         }
         return objectRepresentation.exampleValue;
     }
+
     if (isLiteralObject(objectRepresentation.type)) {
         return Object.fromEntries(
             Object.entries(objectRepresentation.type).map(([key, value]) => [key, changeObjectRepresentationIntoExample(value)]),
         );
     }
+
     return exampleRepresentationOfType(objectRepresentation.type);
 };

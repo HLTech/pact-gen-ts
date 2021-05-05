@@ -25,18 +25,14 @@ export function mapJsDocsIntoInteraction(jsDocNode: tsMorph.JSDoc): Interaction 
                 break;
             }
             case PACT_ANNOTATIONS.PACT_RESPONSE_HEADER: {
-                const headerValues = jsDocTag.getComment()?.split(`" "`);
-                const nameOfHeader = headerValues?.[0].substr(1);
-                const valueOfHeader = headerValues?.[1].slice(0, -1);
+                const {nameOfHeader, valueOfHeader} = getHeaderPair(jsDocTag.getComment());
                 if (nameOfHeader && valueOfHeader) {
                     newInteraction.response.headers = {...newInteraction.response.headers, [nameOfHeader]: valueOfHeader};
                 }
                 break;
             }
             case PACT_ANNOTATIONS.PACT_REQUEST_HEADER: {
-                const headerValues = jsDocTag.getComment()?.split(`" "`);
-                const nameOfHeader = headerValues?.[0].substr(1);
-                const valueOfHeader = headerValues?.[1].slice(0, -1);
+                const {nameOfHeader, valueOfHeader} = getHeaderPair(jsDocTag.getComment());
                 if (nameOfHeader && valueOfHeader) {
                     newInteraction.request.headers = {...newInteraction.request.headers, [nameOfHeader]: valueOfHeader};
                 }
@@ -47,3 +43,8 @@ export function mapJsDocsIntoInteraction(jsDocNode: tsMorph.JSDoc): Interaction 
 
     return newInteraction;
 }
+
+const getHeaderPair = (jsDocComment?: string) => {
+    const headerPair = jsDocComment?.match(/"(?<nameOfHeader>.*?)"\s+"(?<valueOfHeader>.*?)"$/);
+    return {nameOfHeader: headerPair?.groups?.nameOfHeader, valueOfHeader: headerPair?.groups?.valueOfHeader};
+};
