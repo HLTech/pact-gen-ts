@@ -8,6 +8,7 @@ import {ProviderConfig} from './read-pacts-config';
 import {getDefaultResponseStatusForInteraction} from './default-response-status';
 import {PACT_ANNOTATIONS} from '../consts/pact-annotations';
 import {changeObjectRepresentationIntoMatchingRules} from './create-pact-matching-rules';
+import {AxiosInteraction} from './axios-interaction';
 
 export interface Interaction {
     description?: string;
@@ -36,9 +37,44 @@ export class InteractionCreator {
 
     public findAllInteractions() {
         const pactJsDocNodes = this.getPactJsDocsNodes();
+        const axiosNodes = this.getAxiosInteractions();
         return pactJsDocNodes.map(this.getInteractionForPactJsDoc);
     }
 
+    private getAxiosInteractions() {
+        const callexpressions = this.sourceFile.getDescendantsOfKind(ts.SyntaxKind.CallExpression);
+
+        for (const expression of callexpressions) {
+            const axiosInteraction = new AxiosInteraction(expression, this.sourceFile);
+            if (axiosInteraction.isValid()) {
+                console.log(axiosInteraction.toInteraction());
+            }
+        }
+
+        //
+        // callexpressions.forEach(callexpression => {
+        //     console.log(callexpression.getText());
+        //
+        //     console.log('getTypeArguments')
+        //     callexpression.getTypeArguments().forEach(typeArgument => {
+        //         console.log(typeArgument.getText())
+        //     });
+        //
+        //     console.log('getArguments')
+        //     callexpression.getArguments().forEach(arg => {
+        //         console.log(arg.getText())
+        //     });
+        //
+        //     const e = callexpression.getExpression();
+        //     console.log('getExpression Identifier')
+        //
+        //     e.getDescendantsOfKind(ts.SyntaxKind.Identifier).forEach(node => {
+        //         console.log('getText', node.getText())
+        //         console.log('symbol name', node.getType().getSymbol()?.getName())
+        //     })
+        //
+        // })
+    }
     private getPactJsDocsNodes = () => {
         const allJsDocsNodes = this.sourceFile.getDescendantsOfKind(ts.SyntaxKind.JSDocComment);
         return allJsDocsNodes.filter((jsDocNode) =>
