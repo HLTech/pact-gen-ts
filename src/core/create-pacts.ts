@@ -31,7 +31,7 @@ function createPactForProvider(provider: ProviderConfig, pactsConfig: PactConfig
         metadata: {pactSpecification: {version: '2.0.0'}},
     };
 
-    pactDefinition.interactions = readInteractionsFromFiles(provider.files, provider);
+    pactDefinition.interactions = readInteractionsFromFiles(provider.files, {...pactsConfig.commonConfigForProviders, ...provider});
 
     if (pactsConfig.verbose) {
         pactDefinition.interactions.forEach((interaction) => printInteraction(interaction));

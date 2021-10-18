@@ -1,6 +1,6 @@
 {
     "name": "pact-gen-ts",
-    "version": "0.8.1",
+    "version": "0.8.2",
     "description": "Generating pact files from typescript definitions",
     "keywords": [
         "pacts",

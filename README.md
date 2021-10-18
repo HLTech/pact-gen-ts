@@ -359,3 +359,59 @@ module.exports = {
     verbose: true,
 };
 ```
+
+## [X] Handle different query array formats
+
+Arrays in query parameters could be formatted in four different ways: `indices`, `brackets`, `comma` and `repeat` (source: https://github.com/ljharb/qs#stringifying).
+
+Default value is `brackets`.
+
+There is possibility to set query array format for output pact.
+
+In **pacts.config.js**:
+
+```js
+module.exports = {
+    // ...
+    providers: [
+        {
+            provider: 'some-provider',
+            queryArrayFormat: 'indices',
+        },
+    ],
+};
+```
+
+## [X] Specify common config for providers
+
+You can specify common config shared between providers in **pacts.config.js**:
+
+```js
+module.exports = {
+    commonConfigForProviders: {
+        queryArrayFormat: 'indices',
+        requestHeaders: {
+            authorization: 'auth',
+        },
+        responseHeaders: {
+            'Content-Type': 'application/json',
+        },
+    },
+    providers: [
+        {
+            provider: 'first-provider',
+            files: ['src/api1/**/*.ts'],
+        },
+        {
+            provider: 'second-provider',
+            files: ['src/api2/**/*.ts'],
+        },
+        {
+            provider: 'third-provider',
+            files: ['src/api3/**/*.ts'],
+            // you can override common config in provider config
+            queryArrayFormat: 'comma',
+        },
+    ],
+};
+```

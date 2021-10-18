@@ -235,6 +235,130 @@ Object {
 }
 `;
 
+exports[`createPacts handles "brackets" array format for query params 1`] = `
+Object {
+  "consumer": Object {
+    "name": "consumer-name",
+  },
+  "interactions": Array [
+    Object {
+      "description": "firstApiFunction",
+      "request": Object {
+        "headers": Object {},
+        "method": "GET",
+        "path": "/api/first",
+        "query": "stringArray%5B%5D=text",
+      },
+      "response": Object {
+        "headers": Object {},
+        "status": 200,
+      },
+    },
+  ],
+  "metadata": Object {
+    "pactSpecification": Object {
+      "version": "2.0.0",
+    },
+  },
+  "provider": Object {
+    "name": "provider-name",
+  },
+}
+`;
+
+exports[`createPacts handles "comma" array format for query params 1`] = `
+Object {
+  "consumer": Object {
+    "name": "consumer-name",
+  },
+  "interactions": Array [
+    Object {
+      "description": "firstApiFunction",
+      "request": Object {
+        "headers": Object {},
+        "method": "GET",
+        "path": "/api/first",
+        "query": "stringArray=text",
+      },
+      "response": Object {
+        "headers": Object {},
+        "status": 200,
+      },
+    },
+  ],
+  "metadata": Object {
+    "pactSpecification": Object {
+      "version": "2.0.0",
+    },
+  },
+  "provider": Object {
+    "name": "provider-name",
+  },
+}
+`;
+
+exports[`createPacts handles "indices" array format for query params 1`] = `
+Object {
+  "consumer": Object {
+    "name": "consumer-name",
+  },
+  "interactions": Array [
+    Object {
+      "description": "firstApiFunction",
+      "request": Object {
+        "headers": Object {},
+        "method": "GET",
+        "path": "/api/first",
+        "query": "stringArray%5B0%5D=text",
+      },
+      "response": Object {
+        "headers": Object {},
+        "status": 200,
+      },
+    },
+  ],
+  "metadata": Object {
+    "pactSpecification": Object {
+      "version": "2.0.0",
+    },
+  },
+  "provider": Object {
+    "name": "provider-name",
+  },
+}
+`;
+
+exports[`createPacts handles "repeat" array format for query params 1`] = `
+Object {
+  "consumer": Object {
+    "name": "consumer-name",
+  },
+  "interactions": Array [
+    Object {
+      "description": "firstApiFunction",
+      "request": Object {
+        "headers": Object {},
+        "method": "GET",
+        "path": "/api/first",
+        "query": "stringArray=text",
+      },
+      "response": Object {
+        "headers": Object {},
+        "status": 200,
+      },
+    },
+  ],
+  "metadata": Object {
+    "pactSpecification": Object {
+      "version": "2.0.0",
+    },
+  },
+  "provider": Object {
+    "name": "provider-name",
+  },
+}
+`;
+
 exports[`createPacts matching-rules 1`] = `
 Object {
   "consumer": Object {
@@ -583,7 +707,7 @@ Object {
         },
         "method": "GET",
         "path": "/api/first",
-        "query": "stringField=text&numberField=10&booleanField=true&someObject%5BbooleanField%5D=true&someObject%5BnumberField%5D=10&someUnionType=AAA&enumType=FIRST&stringArray%5B0%5D=text&isoDateField=2013-02-01&isoDatetimeWithMillisField=2015-08-06T16%3A53%3A10.123%2B01%3A00",
+        "query": "stringField=text&numberField=10&booleanField=true&someObject%5BbooleanField%5D=true&someObject%5BnumberField%5D=10&someUnionType=AAA&enumType=FIRST&stringArray%5B%5D=text&isoDateField=2013-02-01&isoDatetimeWithMillisField=2015-08-06T16%3A53%3A10.123%2B01%3A00",
       },
       "response": Object {
         "headers": Object {},
@@ -617,7 +741,7 @@ Object {
         },
         "method": "GET",
         "path": "/api/second",
-        "query": "stringField=text&numberField=10&booleanField=true&someObject%5BbooleanField%5D=true&someObject%5BnumberField%5D=10&someUnionType=AAA&enumType=FIRST&stringArray%5B0%5D=text&isoDateField=2013-02-01&isoDatetimeWithMillisField=2015-08-06T16%3A53%3A10.123%2B01%3A00",
+        "query": "stringField=text&numberField=10&booleanField=true&someObject%5BbooleanField%5D=true&someObject%5BnumberField%5D=10&someUnionType=AAA&enumType=FIRST&stringArray%5B%5D=text&isoDateField=2013-02-01&isoDatetimeWithMillisField=2015-08-06T16%3A53%3A10.123%2B01%3A00",
       },
       "response": Object {
         "headers": Object {},
