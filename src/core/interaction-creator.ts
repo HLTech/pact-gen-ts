@@ -112,7 +112,7 @@ export class InteractionCreator {
             const basicTypeRepresentationOfRequestBody = getTypeRepresentation(queryElementType, this.sourceFile);
             const exampleRepresentationOfQueryObject = changeObjectRepresentationIntoExample(basicTypeRepresentationOfRequestBody);
             return {
-                query: qs.stringify(exampleRepresentationOfQueryObject),
+                query: qs.stringify(exampleRepresentationOfQueryObject, {arrayFormat: this.provider.queryArrayFormat || 'brackets'}),
                 matchingRules: changeObjectRepresentationIntoMatchingRules(basicTypeRepresentationOfRequestBody, '$.query'),
             };
         }

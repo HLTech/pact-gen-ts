@@ -1,15 +1,23 @@
+import {IStringifyOptions} from 'qs';
+
 export interface PactConfig {
     consumer: string;
     buildDir: string;
     providers: ProviderConfig[];
     verbose?: boolean;
+    queryArrayFormat?: IStringifyOptions['arrayFormat'];
+    commonConfigForProviders?: CommonProviderConfig;
 }
 
-export interface ProviderConfig {
-    provider: string;
-    files: string[];
+interface CommonProviderConfig {
     requestHeaders?: Record<string, string>;
     responseHeaders?: Record<string, string>;
+    queryArrayFormat?: IStringifyOptions['arrayFormat'];
+}
+
+export interface ProviderConfig extends CommonProviderConfig {
+    provider: string;
+    files: string[];
 }
 
 const PACTS_CONFIG_FILE = '/pacts.config.js';

@@ -1,5 +1,6 @@
 import {createPacts} from '../../src/core/create-pacts';
 import {pactsConfigFactory} from './mocks/pactsConfig';
+import {IStringifyOptions} from 'qs';
 
 describe('createPacts', () => {
     test.each([
@@ -23,4 +24,15 @@ describe('createPacts', () => {
             expect(JSON.parse(pact)).toMatchSnapshot();
         });
     });
+
+    test.each<IStringifyOptions['arrayFormat']>(['brackets', 'indices', 'comma', 'repeat'])(
+        'handles "%s" array format for query params',
+        (queryArrayFormat) => {
+            const pactsConfig = {...pactsConfigFactory('query-array-format'), commonConfigForProviders: {queryArrayFormat}};
+
+            const generatedPact = createPacts(pactsConfig)[0].pact;
+
+            expect(JSON.parse(generatedPact)).toMatchSnapshot();
+        },
+    );
 });
