@@ -91,9 +91,9 @@ const getObjectTypeRepresentation = (entryType: tsMorph.Type, source: tsMorph.So
         jsDocTagsOfProperty?.forEach((jsDocTag) => {
             const annotation = jsDocTag?.getFirstChildByKind(ts.SyntaxKind.Identifier)?.getText();
             if (annotation === PACT_ANNOTATIONS.PACT_MATCHER) {
-                typeMatcher = jsDocTag?.getComment();
+                typeMatcher = jsDocTag?.getCommentText();
             } else if (annotation === PACT_ANNOTATIONS.PACT_EXAMPLE) {
-                exampleRepresentation = jsDocTag?.getComment();
+                exampleRepresentation = jsDocTag?.getCommentText();
             }
         });
 

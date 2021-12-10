@@ -9,30 +9,30 @@ export function mapJsDocsIntoInteraction(jsDocNode: tsMorph.JSDoc): Interaction 
     for (const jsDocTag of jsDocNode.getChildrenOfKind(ts.SyntaxKind.JSDocTag)) {
         switch (jsDocTag.getFirstChildByKind(ts.SyntaxKind.Identifier)?.getText()) {
             case PACT_ANNOTATIONS.PACT_DESCRIPTION: {
-                newInteraction.description = jsDocTag.getComment();
+                newInteraction.description = jsDocTag.getCommentText();
                 break;
             }
             case PACT_ANNOTATIONS.PACT_METHOD: {
-                newInteraction.request.method = jsDocTag.getComment();
+                newInteraction.request.method = jsDocTag.getCommentText();
                 break;
             }
             case PACT_ANNOTATIONS.PACT_RESPONSE_STATUS: {
-                newInteraction.response.status = Number(jsDocTag.getComment());
+                newInteraction.response.status = Number(jsDocTag.getCommentText());
                 break;
             }
             case PACT_ANNOTATIONS.PACT_PATH: {
-                newInteraction.request.path = jsDocTag.getComment();
+                newInteraction.request.path = jsDocTag.getCommentText();
                 break;
             }
             case PACT_ANNOTATIONS.PACT_RESPONSE_HEADER: {
-                const {nameOfHeader, valueOfHeader} = getHeaderPair(jsDocTag.getComment());
+                const {nameOfHeader, valueOfHeader} = getHeaderPair(jsDocTag.getCommentText());
                 if (nameOfHeader && valueOfHeader) {
                     newInteraction.response.headers = {...newInteraction.response.headers, [nameOfHeader]: valueOfHeader};
                 }
                 break;
             }
             case PACT_ANNOTATIONS.PACT_REQUEST_HEADER: {
-                const {nameOfHeader, valueOfHeader} = getHeaderPair(jsDocTag.getComment());
+                const {nameOfHeader, valueOfHeader} = getHeaderPair(jsDocTag.getCommentText());
                 if (nameOfHeader && valueOfHeader) {
                     newInteraction.request.headers = {...newInteraction.request.headers, [nameOfHeader]: valueOfHeader};
                 }
