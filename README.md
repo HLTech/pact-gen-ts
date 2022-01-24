@@ -2,6 +2,17 @@
 
 This project aims to create a package that can generate pact files only from TypeScript definitions (without the necessity of writing separated tests with using [pact-js](https://github.com/pact-foundation/pact-js) package).
 
+## Compatibility with TypeScript
+
+Due to TypeScript's occasional changes to its compiler API and not following semantic versioning in their releases, latest versions of pact-gen-ts can only guarantee compatibility with latest versions of TypeScript.
+
+If you're limited to historical versions of TypeScript, you should install a corresponding version of pact-gen-ts. Below table presents what TS versions pact-gen-ts will work with:
+
+| pact-gen-ts | TypeScript |
+| ----------- | ---------- |
+| 0.8         | 4.1 - 4.2  |
+| 0.9 - x     | \>= 4.5    |
+
 # Work progress
 
 All these points are only an early version of implementation for that package.
