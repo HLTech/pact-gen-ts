@@ -675,6 +675,146 @@ Object {
         "status": 200,
       },
     },
+    Object {
+      "description": "apiFunctionNestedInline",
+      "request": Object {
+        "headers": Object {},
+        "method": "GET",
+        "path": "/api",
+      },
+      "response": Object {
+        "body": Object {
+          "arrayInline": Array [
+            Object {
+              "matcher": "3F",
+              "nestedArray": Array [
+                Object {
+                  "innerMatcher": "3F",
+                },
+              ],
+              "nestedObject": Object {
+                "innerMatcher": "3F",
+              },
+            },
+          ],
+          "objectInline": Object {
+            "matcher": "3F",
+            "nestedArray": Array [
+              Object {
+                "innerMatcher": "3F",
+              },
+            ],
+            "nestedObject": Object {
+              "innerMatcher": "3F",
+            },
+          },
+        },
+        "headers": Object {},
+        "matchingRules": Object {
+          "$.body": Object {
+            "match": "type",
+          },
+          "$.body.arrayInline.matcher": Object {
+            "match": "regex",
+            "regex": "^[0-9a-fA-F]+$",
+          },
+          "$.body.arrayInline.nestedArray.innerMatcher": Object {
+            "match": "regex",
+            "regex": "^[0-9a-fA-F]+$",
+          },
+          "$.body.arrayInline.nestedObject.innerMatcher": Object {
+            "match": "regex",
+            "regex": "^[0-9a-fA-F]+$",
+          },
+          "$.body.objectInline.matcher": Object {
+            "match": "regex",
+            "regex": "^[0-9a-fA-F]+$",
+          },
+          "$.body.objectInline.nestedArray.innerMatcher": Object {
+            "match": "regex",
+            "regex": "^[0-9a-fA-F]+$",
+          },
+          "$.body.objectInline.nestedObject.innerMatcher": Object {
+            "match": "regex",
+            "regex": "^[0-9a-fA-F]+$",
+          },
+        },
+        "status": 200,
+      },
+    },
+    Object {
+      "description": "apiFunctionNested",
+      "request": Object {
+        "headers": Object {},
+        "method": "GET",
+        "path": "/api",
+      },
+      "response": Object {
+        "body": Object {
+          "array": Array [
+            Object {
+              "emailField": "email@example.com",
+            },
+          ],
+          "arrayNested": Array [
+            Object {
+              "nestedArray": Array [
+                Object {
+                  "emailField": "email@example.com",
+                },
+              ],
+              "nestedObject": Object {
+                "emailField": "email@example.com",
+              },
+            },
+          ],
+          "object": Object {
+            "emailField": "email@example.com",
+          },
+          "objectNested": Object {
+            "nestedArray": Array [
+              Object {
+                "emailField": "email@example.com",
+              },
+            ],
+            "nestedObject": Object {
+              "emailField": "email@example.com",
+            },
+          },
+        },
+        "headers": Object {},
+        "matchingRules": Object {
+          "$.body": Object {
+            "match": "type",
+          },
+          "$.body.array.emailField": Object {
+            "match": "regex",
+            "regex": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$",
+          },
+          "$.body.arrayNested.nestedArray.emailField": Object {
+            "match": "regex",
+            "regex": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$",
+          },
+          "$.body.arrayNested.nestedObject.emailField": Object {
+            "match": "regex",
+            "regex": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$",
+          },
+          "$.body.object.emailField": Object {
+            "match": "regex",
+            "regex": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$",
+          },
+          "$.body.objectNested.nestedArray.emailField": Object {
+            "match": "regex",
+            "regex": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$",
+          },
+          "$.body.objectNested.nestedObject.emailField": Object {
+            "match": "regex",
+            "regex": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$",
+          },
+        },
+        "status": 200,
+      },
+    },
   ],
   "metadata": Object {
     "pactSpecification": Object {

@@ -87,11 +87,11 @@ const getObjectTypeRepresentation = (entryType: tsMorph.Type, source: tsMorph.So
 
         let typeMatcher: string | undefined;
         let exampleRepresentation: string | undefined;
-        const jsDocTagsOfProperty = property.getValueDeclaration()?.getDescendantsOfKind(ts.SyntaxKind.JSDocTag);
-        jsDocTagsOfProperty?.forEach((jsDocTag) => {
-            const annotation = jsDocTag?.getFirstChildByKind(ts.SyntaxKind.Identifier)?.getText();
+
+        getJsDocTagsForObjectProperty(property).forEach((jsDocTag) => {
+            const annotation = jsDocTag.getFirstChildByKind(ts.SyntaxKind.Identifier)?.getText();
             if (annotation === PACT_ANNOTATIONS.PACT_MATCHER) {
-                typeMatcher = jsDocTag?.getCommentText();
+                typeMatcher = jsDocTag.getCommentText();
             } else if (annotation === PACT_ANNOTATIONS.PACT_EXAMPLE) {
                 exampleRepresentation = jsDocTag?.getCommentText();
             }
@@ -116,3 +116,20 @@ const getObjectTypeRepresentation = (entryType: tsMorph.Type, source: tsMorph.So
 
     return objectTypeRepresentation;
 };
+
+/** Find all JS Doc tag children nodes for object property - handle only current property level without going lower in the tree **/
+function getJsDocTagsForObjectProperty(property: tsMorph.Symbol): tsMorph.JSDocUnknownTag[] {
+    const jsDocComments = property.getValueDeclaration()?.getChildrenOfKind(ts.SyntaxKind.JSDocComment);
+
+    if (!jsDocComments) {
+        return [];
+    }
+
+    const jsDocTags: tsMorph.JSDocUnknownTag[] = [];
+
+    for (const jsDocComment of jsDocComments) {
+        jsDocTags.push(...jsDocComment.getChildrenOfKind(ts.SyntaxKind.JSDocTag));
+    }
+
+    return jsDocTags;
+}
