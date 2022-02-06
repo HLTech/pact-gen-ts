@@ -78,9 +78,9 @@ export class InteractionCreator {
     };
 
     private getResponseBodyForApiFunction = (apiFunctionNode: tsMorph.Node) => {
-        const functionBody = apiFunctionNode.getFirstChildByKindOrThrow(ts.SyntaxKind.Block);
+        const functionBody = apiFunctionNode.getFirstChildByKind(ts.SyntaxKind.Block);
         const responseBodyType =
-            InteractionCreator.getResponseTypeFromFunctionBody(functionBody) ||
+            (functionBody && InteractionCreator.getResponseTypeFromFunctionBody(functionBody)) ||
             InteractionCreator.getReturnTypeOfFunction(apiFunctionNode.getType());
         const basicTypeRepresentationOfResponse = getTypeRepresentation(responseBodyType, this.sourceFile, true);
         return {
@@ -195,8 +195,8 @@ export class InteractionCreator {
         jsDoc: string,
     ): tsMorph.VariableDeclaration | undefined => {
         const pactBodyJsDoc = functionDeclaration
-            .getFirstChildByKindOrThrow(ts.SyntaxKind.Block)
-            .getDescendantsOfKind(ts.SyntaxKind.JSDocComment)
+            .getFirstChildByKind(ts.SyntaxKind.Block)
+            ?.getDescendantsOfKind(ts.SyntaxKind.JSDocComment)
             .find((jsDocComment) => {
                 return (
                     jsDocComment.getFirstChildByKind(ts.SyntaxKind.JSDocTag)?.getFirstChildByKind(ts.SyntaxKind.Identifier)?.getText() ===
