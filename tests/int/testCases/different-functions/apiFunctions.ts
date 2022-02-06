@@ -16,6 +16,13 @@ export const arrowFunction = () => {
     return 'string';
 };
 
+/**
+ * @pact
+ * @pact-method GET
+ * @pact-path /api/arrow/withoutCurlyBraces
+ */
+export const arrowFunctionWithoutCurlyBraces = () => 'string';
+
 export const apiObject = {
     /**
      * @pact

@@ -146,6 +146,19 @@ Object {
       },
     },
     Object {
+      "description": "arrowFunctionWithoutCurlyBraces",
+      "request": Object {
+        "headers": Object {},
+        "method": "GET",
+        "path": "/api/arrow/withoutCurlyBraces",
+      },
+      "response": Object {
+        "body": "text",
+        "headers": Object {},
+        "status": 200,
+      },
+    },
+    Object {
       "description": "objectPropertyFunction",
       "request": Object {
         "headers": Object {},
