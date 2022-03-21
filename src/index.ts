@@ -10,7 +10,7 @@ export function run(process: NodeJS.Process) {
 
         generatedPacts.forEach(({pact, provider}) => {
             const resultFilePath = `${pactsConfig.buildDir}/${pactsConfig.consumer}-${provider}.json`;
-            writeToFile(pactsConfig.buildDir, resultFilePath, pact);
+            writeToFile(pactsConfig.buildDir, resultFilePath, JSON.stringify(pact, null, 2));
 
             console.log('A pact file has been generated: ', resultFilePath);
         });

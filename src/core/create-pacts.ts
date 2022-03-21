@@ -37,7 +37,7 @@ function createPactForProvider(provider: ProviderConfig, pactsConfig: PactConfig
         pactDefinition.interactions.forEach((interaction) => printInteraction(interaction));
     }
 
-    return JSON.stringify(pactDefinition, null, 2);
+    return pactDefinition;
 }
 
 function readInteractionsFromFiles(filesWithApiFunctions: string[], provider: ProviderConfig) {

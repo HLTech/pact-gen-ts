@@ -21,7 +21,7 @@ describe('createPacts', () => {
         const generatedPacts = createPacts(pactsConfig);
 
         generatedPacts.forEach(({pact}) => {
-            expect(JSON.parse(pact)).toMatchSnapshot();
+            expect(JSON.parse(JSON.stringify(pact, null, 2))).toMatchSnapshot();
         });
     });
 
@@ -32,7 +32,7 @@ describe('createPacts', () => {
 
             const generatedPact = createPacts(pactsConfig)[0].pact;
 
-            expect(JSON.parse(generatedPact)).toMatchSnapshot();
+            expect(JSON.parse(JSON.stringify(generatedPact, null, 2))).toMatchSnapshot();
         },
     );
 });
