@@ -5,7 +5,18 @@ import {glob} from 'glob';
 import {printInteraction} from './print-interaction';
 
 export function createPacts(pactsConfig: PactConfig) {
-    return pactsConfig.providers.map((provider) => createPactForProvider(provider, pactsConfig));
+    const pactDefinitions = pactsConfig.providers.map((provider) => createPactDefinitionForProvider(provider, pactsConfig));
+
+    const pactsWithEmptyInteractions = pactDefinitions.filter((pact) => pact.interactions.length === 0);
+
+    if (pactsWithEmptyInteractions.length) {
+        const errorMessage = pactsWithEmptyInteractions
+            .map((pact) => `Pact interactions for provider: ${pact.provider?.name} are empty.`)
+            .join('\n');
+        throw new Error(errorMessage);
+    }
+
+    return pactDefinitions;
 }
 
 interface PactDefinition {
@@ -23,7 +34,7 @@ interface PactDefinition {
     };
 }
 
-function createPactForProvider(provider: ProviderConfig, pactsConfig: PactConfig) {
+function createPactDefinitionForProvider(provider: ProviderConfig, pactsConfig: PactConfig) {
     const pactDefinition: PactDefinition = {
         consumer: {name: pactsConfig.consumer},
         provider: {name: provider.provider},
