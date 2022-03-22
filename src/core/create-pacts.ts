@@ -5,7 +5,7 @@ import {glob} from 'glob';
 import {printInteraction} from './print-interaction';
 
 export function createPacts(pactsConfig: PactConfig) {
-    return pactsConfig.providers.map((provider) => ({pact: createPactForProvider(provider, pactsConfig), provider: provider.provider}));
+    return pactsConfig.providers.map((provider) => createPactForProvider(provider, pactsConfig));
 }
 
 interface PactDefinition {

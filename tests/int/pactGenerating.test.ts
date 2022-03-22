@@ -20,7 +20,7 @@ describe('createPacts', () => {
 
         const generatedPacts = createPacts(pactsConfig);
 
-        generatedPacts.forEach(({pact}) => {
+        generatedPacts.forEach((pact) => {
             expect(JSON.parse(JSON.stringify(pact, null, 2))).toMatchSnapshot();
         });
     });
@@ -30,7 +30,7 @@ describe('createPacts', () => {
         (queryArrayFormat) => {
             const pactsConfig = {...pactsConfigFactory('query-array-format'), commonConfigForProviders: {queryArrayFormat}};
 
-            const generatedPact = createPacts(pactsConfig)[0].pact;
+            const generatedPact = createPacts(pactsConfig)[0];
 
             expect(JSON.parse(JSON.stringify(generatedPact, null, 2))).toMatchSnapshot();
         },
