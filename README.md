@@ -1,38 +1,29 @@
-# pact-gen-ts
+# Pact-gen-ts
 
-This project aims to create a package that can generate pact files only from TypeScript definitions (without the necessity of writing separated tests with using [pact-js](https://github.com/pact-foundation/pact-js) package).
+Pact-gen-ts is a tool for generating contracts using TypeScript type definitions and custom JSDoc tags.
 
-## Compatibility with TypeScript
+It's an alternative to the [pact-js](https://github.com/pact-foundation/pact-js) package but without the necessity for writing separate tests.
+It provides automated, low maintenance and more flexible way to generate contracts according to [Pact specification version 2](https://github.com/pact-foundation/pact-specification).
 
-Due to TypeScript's occasional changes to its compiler API and not following semantic versioning in their releases, latest versions of pact-gen-ts can only guarantee compatibility with latest versions of TypeScript.
+## Installation and usage
 
-If you're limited to historical versions of TypeScript, you should install a corresponding version of pact-gen-ts. Below table presents what TS versions pact-gen-ts will work with:
+You can install pact-gen-ts using npm:
 
-| pact-gen-ts | TypeScript |
-| ----------- | ---------- |
-| 0.8         | 4.1 - 4.2  |
-| 0.9 - x     | \>= 4.5    |
-
-# Work progress
-
-All these points are only an early version of implementation for that package.
-
-## [x] Generating information about consumer in pacts
-
-In **pacts.config.js**:
-
-```js
-module.exports = {
-    consumer: 'some-consumer',
-};
+```bash
+npm install pact-gen-ts --save-dev
 ```
 
-## [x] Generating information about provider in pacts
+or yarn:
 
-In **pacts.config.js**:
+```bash
+yarn add --dev pact-gen-ts
+```
+
+Next you should create a minimal `pacts.config.js` configuration file in the root directory:
 
 ```js
 module.exports = {
+    consumer: 'consumer-name',
     providers: [
         {
             provider: 'some-provider',
@@ -42,299 +33,52 @@ module.exports = {
 };
 ```
 
-### [x] Specify multiple providers
+where `files` property will be an array of glob patterns pointing to API functions definitions.
 
-## [x] Add metadata and pact specification into pacts
+After that pact-gen-ts is ready, now you need to mark all API functions which will be analysed:
 
-Pact Specification in version 2.0.0
+```ts
+/**
+ * @pact
+ */
+function fetchComments() {
+    // ...
+}
+```
 
-## [x] Specify build dir for output pacts
+The last thing is to execute the command:
 
-In **pacts.config.js**:
+```bash
+pact-gen-ts
+```
+
+which does the analysis and generates pacts in JSON format inside (by default) `./pacts` directory.
+
+## Compatibility with TypeScript
+
+Due to TypeScript's occasional changes to its compiler API and not following semantic versioning in their releases, the latest versions of pact-gen-ts can only guarantee compatibility with the latest versions of TypeScript.
+
+If you're limited to historical versions of TypeScript, you should install a corresponding version of pact-gen-ts. The below table presents what TS versions pact-gen-ts will work with:
+
+| pact-gen-ts | TypeScript |
+| ----------- | ---------- |
+| 0.8         | 4.1 - 4.2  |
+| 0.9 - x     | \>= 4.5    |
+
+## Configuration
+
+Pact-gen-ts uses configuration stored in `pacts.config.js` file in project's root directory:
 
 ```js
 module.exports = {
-    buildDir: '/pacts',
-};
-```
-
-## [x] Specify API function in code
-
-```ts
-/**
- * @pact
- */
-function fetchComments() {
-    // ...
-}
-```
-
-## [x] Specify description of interaction
-
-```ts
-/**
- * @pact
- * @pact-description "request to get comments"
- */
-function fetchComments() {
-    // ...
-}
-```
-
-### [X] Description of interaction can be optional
-
-If we do not specify description of interaction by `@pact-description`, the description is set from the name of function / variable / property.
-
-## [x] Specify REST method of interaction
-
-```ts
-/**
- * @pact
- * @pact-method GET
- */
-function fetchComments() {
-    // ...
-}
-```
-
-## [x] Specify response status of interaction
-
-```ts
-/**
- * @pact
- * @pact-response-status 200
- */
-function fetchComments() {
-    // ...
-}
-```
-
-### [X] Response status can be optional argument
-
-If we do not use `@pact-response-status`, the proper response status is set based on given HTTP method.
-
-## [x] Specify api path of interaction
-
-```ts
-/**
- * @pact
- * @pact-path /api/images/100
- */
-function fetchImage(imageId: number) {
-    // ...
-}
-```
-
-## [x] Create response body in pacts from returned type of function
-
-```ts
-/**
- * @pact
- */
-function fetchComments() {
-    // ...
-    return data;
-}
-```
-
-Pact-gen-ts recognizes response body type of interaction from returned object.
-
-## [x] Set manually what is response body
-
-```ts
-/**
- * @pact
- */
-function fetchComments() {
-    // ...
-    /** @pact-response-body */
-    const data = response.body;
-    // ...
-}
-```
-
-## Analyze and recognize types
-
-### [x] Read boolean type
-
-### [x] Read number type
-
-### [x] Read string type
-
-### [x] Read nested object
-
-### [x] Read intersection types
-
-### [x] Read union types
-
-### [x] Read enum type
-
-### [x] Read type aliases
-
-### [x] Read arrays
-
-## Create matching rules in pacts
-
-### [x] For enums
-
-### [x] For unions
-
-### [x] For matchers
-
-## Specify common matcher formats
-
-### [x] @pact-matcher email
-
-### [x] @pact-matcher iso-date
-
-ISO8601 Date
-
-Example: `2021-04-13`
-
-### [x] @pact-matcher iso-datetime
-
-ISO8601 Date and Time string
-
-Example: `2021-04-13T10:14:53+01:00`
-
-### [x] @pact-matcher iso-datetime-with-millis
-
-ISO8601 DateTime with millisecond precision
-
-Example: `2021-04-13T10:14:53.123+01:00`
-
-### [x] @pact-matcher iso-time
-
-ISO8601 Time, matches a pettern of the format "'T'HH:mm:ss"
-
-Example: `T10.14.53.342Z`
-
-### [x] @pact-matcher timestamp
-
-RFC3339 Timestamp
-
-Example: `Tue, 13 Apr 2021 10:14:53 -0400`
-
-### [x] @pact-matcher uuid
-
-UUID v4
-
-Example: `ce11b6e-d8e1-11e7-9296-cec278b6b50a`
-
-### [x] @pact-matcher ipv4
-
-Example: `127.0.0.13`
-
-### [x] @pact-matcher ipv6
-
-Example: `::ffff:192.0.2.128`
-
-### [x] @pact-matcher hex
-
-Example: `A4C3Ff`
-
----
-
-```ts
-interface CommentDTO {
-    id: number;
-    /** @pact-matcher email */
-    user: string;
-    /** @pact-matcher iso-datetime */
-    datetime: string;
-    comment: string;
-}
-```
-
-## Specify example representation of type
-
-```ts
-interface Address {
-    city: string;
-    address: string;
-    /** @pact-example "99-400" */
-    postCode: string;
-}
-```
-
-## Create the concept of using JavaScript decorators to get information about interaction path
-
-```ts
-@BaseUrl('/api/v1/posts/:postId')
-class PostsApi extends ApiClass {
-    getPost(postId: string) {
-        const url = this.endpoint(postId);
-        return axios.get(url);
-    }
-
-    deletePost(postId: string) {
-        const url = this.endpoint(postId);
-        return axios.delete(url);
-    }
-
-    @PathApi('/comments')
-    getCommentsForPost(postId: string) {
-        const url = this.endpoint(postId);
-        return axios.get(url);
-    }
-
-    @PathApi('/comments/:commentId')
-    deleteCommentsForPost(postId: string, commentId: string) {
-        const url = this.endpoint(postId, commentId);
-        return axios.get(url);
-    }
-}
-```
-
-## [X] Create the concept how to get information about query string params of interaction
-
-```ts
-function fetchComments(/** @pact-query */ query: Query) {
-    // ...
-}
-
-interface Query {
-    fromUser: string;
-    postId: string;
-}
-```
-
-## [X] Create the concept how to get information about request body of interaction
-
-```ts
-function addComment(/** @pact-request-body */ newComment: NewComment) {
-    // ...
-}
-
-interface NewComment {
-    content: string;
-    postId: string;
-}
-```
-
-or
-
-```ts
-function addComment(postId: string, commentContent: string) {
-    /** @pact-request-body */
-    const newComment = {
-        postId,
-        commentContent,
-    };
-    // ...
-}
-```
-
-## [X] Create the concept how to get information about headers of interaction
-
-In **pacts.config.js** you can specify common headers for request or response in the range of provider:
-
-```js
-module.exports = {
+    consumer: 'consumer-name',
+    buildDir: 'pacts',
+    verbose: true,
     providers: [
         {
-            provider: 'some-provider',
-            files: ['src/api/**/*.ts'],
+            provider: 'provider-name',
+            files: ['src/api/firstProvider/*.ts'],
+            queryArrayFormat: 'indices',
             requestHeaders: {
                 authorization: 'auth',
             },
@@ -346,54 +90,18 @@ module.exports = {
 };
 ```
 
-You can also add headers by jsDocs:
+### Options
 
-```ts
-/**
- * @pact
- * @pact-request-header "Content-Type" "application/pdf"
- * @pact-response-header "Content-Type" "application/pdf"
- */
-function updateReport() {
-    // ...
-}
-```
-
-## [X] Create verbose flag
-
-Add the "verbose" flag if you want the created interactions to be displayed in the console.
-
-In **pacts.config.js**:
-
-```js
-module.exports = {
-    verbose: true,
-};
-```
-
-## [X] Handle different query array formats
-
-Arrays in query parameters could be formatted in four different ways: `indices`, `brackets`, `comma` and `repeat` (source: https://github.com/ljharb/qs#stringifying).
-
-Default value is `brackets`.
-
-There is possibility to set query array format for output pact.
-
-In **pacts.config.js**:
-
-```js
-module.exports = {
-    // ...
-    providers: [
-        {
-            provider: 'some-provider',
-            queryArrayFormat: 'indices',
-        },
-    ],
-};
-```
-
-## [X] Specify common config for providers
+| Option                         | Required |   Default    | Description                                                                                                                                                                                          |
+| ------------------------------ | :------: | :----------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `consumer`                     |   Yes    |      -       | Consumer's name                                                                                                                                                                                      |
+| `providers[].provider`         |   Yes    |      -       | Provider's name                                                                                                                                                                                      |
+| `providers[].files`            |   Yes    |      -       | Array of glob patterns where API functions are defined                                                                                                                                               |
+| `providers[].requestHeaders`   |    No    |      -       | Request headers shared across all requests                                                                                                                                                           |
+| `providers[].responseHeaders`  |    No    |      -       | Response headers shared across all responses                                                                                                                                                         |
+| `providers[].queryArrayFormat` |    No    | `"brackets"` | Sets separator for array in query - possible options are `"indices"`, `"brackets"`, `"comma"` and `"repeat"` [(source)](https://github.com/ljharb/qs#stringifying). The default value is `brackets`. |
+| `buildDir`                     |    No    |  `./pacts`   | Directory where generated pacts will be placed                                                                                                                                                       |
+| `verbose`                      |    No    |   `false`    | If set to `true` additional information during pacts generating process will be logged                                                                                                               |
 
 You can specify common config shared between providers in **pacts.config.js**:
 
@@ -425,4 +133,206 @@ module.exports = {
         },
     ],
 };
+```
+
+## Pact interaction options
+
+These JSDoc custom tags are used to adjust generated pact interactions.
+
+`@pact-method` - sets REST method (GET, POST, PUT, PATCH, DELETE etc.)
+
+```ts
+/**
+ * @pact
+ * @pact-method GET
+ */
+function fetchComments() {
+    // ...
+}
+```
+
+`@pact-path` - sets path
+
+```ts
+/**
+ * @pact
+ * @pact-path /api/images/100
+ */
+function fetchImage(imageId: number) {
+    // ...
+}
+```
+
+`@pact-description` - sets description, if not provided, description is set using name of the function / variable / property.
+
+```ts
+/**
+ * @pact
+ * @pact-description "request to get comments"
+ */
+function fetchComments() {
+    // ...
+}
+```
+
+`@pact-response-status` - sets response status, if not provided, it is set based on given HTTP method
+
+```ts
+/**
+ * @pact
+ * @pact-response-status 200
+ */
+function fetchComments() {
+    // ...
+}
+```
+
+`@pact-request-header` - adds a header to the current request, can override option defined in `pacts.config.js`
+
+```ts
+/**
+ * @pact
+ * @pact-request-header "Content-Type" "application/pdf"
+ */
+function fetchImage(imageId: number) {
+    // ...
+}
+```
+
+`@pact-response-header` - adds a header to the current response, can override option defined in `pacts.config.js`
+
+```ts
+/**
+ * @pact
+ * @pact-response-header "Content-Type" "application/pdf"
+ */
+function fetchImage(imageId: number) {
+    // ...
+}
+```
+
+`@pact-response-body` - sets expected body for the current response
+
+```ts
+/**
+ * @pact
+ */
+async function fetchComments() {
+    // ...
+    const response = await axios.get<string>('/api');
+    /** @pact-response-body */
+    const data = response.data;
+    // ...
+}
+```
+
+**IMPORTANT** - JSDoc has to be applied to separate variable - **not** directly to axios response
+
+```ts
+async function fetchComments() {
+    // ...
+    /** @pact-response-body */ -WRONG!;
+    const response = await axios.get<string>('/api');
+
+    /** @pact-response-body */ -CORRECT;
+    const data = response.data;
+    // ...
+}
+```
+
+`@pact-request-body` - sets expected body for current request
+
+```ts
+function addComment(/** @pact-request-body */ newComment: NewComment) {
+    // ...
+}
+
+interface NewComment {
+    content: string;
+    postId: string;
+}
+```
+
+or
+
+```js
+function addComment(postId: string, commentContent: string) {
+    /** @pact-request-body */
+    const newComment = {
+        postId,
+        commentContent,
+    };
+    // ...
+}
+```
+
+`@pact-query` - sets query, **IMPORTANT** - JSDoc tag has to be applied to an object - not a primitive value.
+
+Array separator format can be set using `queryArrayFormat` in providers options
+
+```ts
+function fetchComments(/** @pact-query */ query: Query) {
+    // ...
+}
+
+interface Query {
+    fromUser: string;
+    postId: string;
+}
+```
+
+or
+
+```ts
+function fetchComments(pageNo: string) {
+    /** @pact-query */
+    const params = {
+        pageNo,
+    };
+    // ...
+}
+```
+
+### Pact matchers
+
+Typescript types can describe the shape of the data and define possible values a variable can store. Pacts definition require specific values, that's why for some individual cases additional information needs to be added.
+
+For example a type `string` without any modifications will be replaced with simple `text` which can be later matched by type. Sometimes that's not enough - the matcher needs to be more specific, for instance instead of simple `text` we need a string in a particular format like `name@example.com` - that's where a `@pact-matcher` tag is used.
+
+Pact-matchers are used in the type/interface definition:
+
+```ts
+interface CommentDTO {
+    id: number;
+    /** @pact-matcher email */
+    user: string;
+}
+```
+
+Provided common matchers:
+
+| Pact matcher                                    | Result                              |
+| ----------------------------------------------- | ----------------------------------- |
+| `/** @pact-matcher email */`                    | email@example.com                   |
+| `/** @pact-matcher iso-date */`                 | 2021-04-13                          |
+| `/** @pact-matcher iso-datetime */`             | 2021-04-13T10:14:53+01:00           |
+| `/** @pact-matcher iso-datetime-with-millis */` | 2021-04-13T10:14:53.123+01:00       |
+| `/** @pact-matcher iso-time */`                 | T10.14.53.342Z                      |
+| `/** @pact-matcher timestamp */`                | Tue, 13 Apr 2021 10:14:53 -0400     |
+| `/** @pact-matcher uuid */`                     | ce11b6e-d8e1-11e7-9296-cec278b6b50a |
+| `/** @pact-matcher ipv4 */`                     | 127.0.0.13                          |
+| `/** @pact-matcher ipv6 */`                     | ::ffff:192.0.2.128                  |
+| `/** @pact-matcher hex */`                      | A4C3Ff                              |
+
+If that's not enough you can easily provide own value using `/** @pact-example */`:
+
+```ts
+interface Address {
+    city: string;
+    address: string;
+    /** @pact-example 99-400 */
+    postCode: string;
+    /** @pact-example 45 */
+    age: number;
+}
 ```
