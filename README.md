@@ -63,7 +63,8 @@ If you're limited to historical versions of TypeScript, you should install a cor
 | pact-gen-ts | TypeScript |
 | ----------- | ---------- |
 | 0.8         | 4.1 - 4.2  |
-| 0.9 - x     | \>= 4.5    |
+| 0.9 - 0.9.3 | 4.5 - 4.6  |
+| 0.9.4 - x   | \>=4.7     |
 
 ## Configuration
 

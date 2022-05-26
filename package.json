@@ -1,6 +1,6 @@
 {
     "name": "pact-gen-ts",
-    "version": "0.9.3",
+    "version": "0.9.4",
     "description": "Generating pact files from typescript definitions",
     "keywords": [
         "pacts",
@@ -25,7 +25,7 @@
     "dependencies": {
         "glob": "^7.1.6",
         "qs": "^6.10.1",
-        "ts-morph": "^13.0.2"
+        "ts-morph": "^15.0.0"
     },
     "devDependencies": {
         "@types/glob": "^7.1.3",
@@ -40,10 +40,10 @@
         "semantic-release": "^17.4.2",
         "ts-jest": "^26.5.5",
         "ts-node": "^9.1.1",
-        "typescript": "~4.5.3"
+        "typescript": "~4.7.2"
     },
     "peerDependencies": {
-        "typescript": "^4.5"
+        "typescript": "^4.7"
     },
     "repository": {
         "type": "git",

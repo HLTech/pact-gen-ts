@@ -40,7 +40,7 @@ export class InteractionCreator {
     }
 
     private getPactJsDocsNodes = () => {
-        const allJsDocsNodes = this.sourceFile.getDescendantsOfKind(ts.SyntaxKind.JSDocComment);
+        const allJsDocsNodes = this.sourceFile.getDescendantsOfKind(ts.SyntaxKind.JSDoc);
         return allJsDocsNodes.filter((jsDocNode) =>
             jsDocNode
                 .getChildrenOfKind(ts.SyntaxKind.JSDocTag)
@@ -154,7 +154,7 @@ export class InteractionCreator {
     };
 
     private static getResponseTypeFromFunctionBody = (bodyOfFunction: tsMorph.Block): tsMorph.Type | undefined => {
-        const responseBodyJsDoc = bodyOfFunction.getDescendantsOfKind(ts.SyntaxKind.JSDocComment).find((jsDocComment) => {
+        const responseBodyJsDoc = bodyOfFunction.getDescendantsOfKind(ts.SyntaxKind.JSDoc).find((jsDocComment) => {
             return (
                 jsDocComment.getFirstChildByKind(ts.SyntaxKind.JSDocTag)?.getFirstChildByKind(ts.SyntaxKind.Identifier)?.getText() ===
                 PACT_ANNOTATIONS.PACT_RESPONSE_BODY
@@ -181,7 +181,7 @@ export class InteractionCreator {
         const parametersOfFunction = functionDeclaration.getChildrenOfKind(ts.SyntaxKind.Parameter);
         for (const parameter of parametersOfFunction) {
             const jsDocIdentifierNode = parameter
-                .getFirstChildByKind(ts.SyntaxKind.JSDocComment)
+                .getFirstChildByKind(ts.SyntaxKind.JSDoc)
                 ?.getFirstChildByKind(ts.SyntaxKind.JSDocTag)
                 ?.getFirstChildByKind(ts.SyntaxKind.Identifier);
             if (jsDocIdentifierNode?.getText() === jsDoc) {
@@ -196,7 +196,7 @@ export class InteractionCreator {
     ): tsMorph.VariableDeclaration | undefined => {
         const pactBodyJsDoc = functionDeclaration
             .getFirstChildByKind(ts.SyntaxKind.Block)
-            ?.getDescendantsOfKind(ts.SyntaxKind.JSDocComment)
+            ?.getDescendantsOfKind(ts.SyntaxKind.JSDoc)
             .find((jsDocComment) => {
                 return (
                     jsDocComment.getFirstChildByKind(ts.SyntaxKind.JSDocTag)?.getFirstChildByKind(ts.SyntaxKind.Identifier)?.getText() ===
