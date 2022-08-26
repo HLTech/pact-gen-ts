@@ -2,9 +2,12 @@ import {isEmptyObject, isLiteralObject} from '../utils/object-type';
 import {TypeRepresentation} from './type-representation';
 import {matchingRegexFormats} from '../consts/matching-regex-formats';
 
-type MatchingRules = Record<string, {match: 'regex' | 'type'; regex?: string}>;
+export type MatchingRules = Record<string, {match: 'regex' | 'type'; regex?: string}>;
 
-export const changeObjectRepresentationIntoMatchingRules = (objectRepresentation: TypeRepresentation, level: string) => {
+export const changeObjectRepresentationIntoMatchingRules = (
+    objectRepresentation: TypeRepresentation,
+    level: string,
+): MatchingRules | undefined => {
     const matchingRules: MatchingRules = {};
 
     const findAllMatchingRulesRecursive = (objectRepresentation: TypeRepresentation, currentLevel: string) => {

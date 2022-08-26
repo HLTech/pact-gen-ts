@@ -1,5 +1,6 @@
 export enum PACT_ANNOTATIONS {
     PACT = 'pact',
+    PACT_AXIOS = 'pact-axios',
     PACT_DESCRIPTION = 'pact-description',
     PACT_METHOD = 'pact-method',
     PACT_RESPONSE_STATUS = 'pact-response-status',

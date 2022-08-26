@@ -1,13 +1,17 @@
 import * as ts from 'typescript';
 import * as tsMorph from 'ts-morph';
 import {mapJsDocsIntoInteraction} from './js-docs-into-interaction';
-import {getTypeRepresentation} from './type-representation';
-import {changeObjectRepresentationIntoExample} from './create-pact-example-object';
-import qs from 'qs';
 import {ProviderConfig} from './read-pacts-config';
 import {getDefaultResponseStatusForInteraction} from './default-response-status';
 import {PACT_ANNOTATIONS} from '../consts/pact-annotations';
-import {changeObjectRepresentationIntoMatchingRules} from './create-pact-matching-rules';
+import {PactAxios} from '../integrations/pact-axios/pact-axios';
+import {PactDescription} from './pact-description';
+import {PactAxiosResponseBody} from '../integrations/pact-axios/pact-axios-response-body';
+import {ResponseBody} from './response-body';
+import {RequestBody} from './request-body';
+import {PactAxiosRequestBody} from '../integrations/pact-axios/pact-axios-request-body';
+import {Query} from './query';
+import {PactAxiosQuery} from '../integrations/pact-axios/pact-axios-query';
 
 export interface Interaction {
     description?: string;
@@ -52,70 +56,45 @@ export class InteractionCreator {
         const nodeWithUsagePactJsDoc = pactJsDoc.getParent();
         const apiFunctionNode = InteractionCreator.getFunctionNode(nodeWithUsagePactJsDoc);
         if (apiFunctionNode) {
+            const pactDescription = new PactDescription(pactJsDoc);
             const newInteraction = mapJsDocsIntoInteraction(pactJsDoc);
-            newInteraction.response.status ||= getDefaultResponseStatusForInteraction(newInteraction);
+
             newInteraction.description ||= InteractionCreator.getNameOfFunction(nodeWithUsagePactJsDoc);
 
             newInteraction.request.headers = {...this.provider.requestHeaders, ...newInteraction.request.headers};
             newInteraction.response.headers = {...this.provider.responseHeaders, ...newInteraction.response.headers};
 
-            const responseBody = this.getResponseBodyForApiFunction(apiFunctionNode);
-            const requestBody = this.getRequestBodyForApiFunction(apiFunctionNode);
-            const queryOfRequest = this.getQueryRequestForApiFunction(apiFunctionNode);
+            let responseBody;
+            let requestBody;
+            let queryOfRequest;
+
+            if (pactDescription.isAxiosTagSet()) {
+                const pactAxios = new PactAxios(apiFunctionNode);
+
+                newInteraction.request.method = pactAxios.getRequestMethod();
+
+                responseBody = new PactAxiosResponseBody(pactAxios, this.sourceFile);
+                requestBody = new PactAxiosRequestBody(pactAxios, this.sourceFile);
+                queryOfRequest = new PactAxiosQuery(pactAxios, this.sourceFile, this.provider.queryArrayFormat);
+            } else {
+                responseBody = new ResponseBody(apiFunctionNode, this.sourceFile);
+                requestBody = new RequestBody(apiFunctionNode, this.sourceFile);
+                queryOfRequest = new Query(apiFunctionNode, this.sourceFile, this.provider.queryArrayFormat);
+            }
 
             newInteraction.response.body = responseBody.body;
             newInteraction.response.matchingRules = responseBody.matchingRules;
-            newInteraction.request.body = requestBody?.body;
-            newInteraction.request.query = queryOfRequest?.query;
+            newInteraction.request.body = requestBody.body;
+            newInteraction.request.query = queryOfRequest.query;
             newInteraction.request.matchingRules =
-                queryOfRequest?.matchingRules || requestBody?.matchingRules
+                queryOfRequest.matchingRules || requestBody.matchingRules
                     ? {...queryOfRequest?.matchingRules, ...requestBody?.matchingRules}
                     : undefined;
+            newInteraction.response.status ||= getDefaultResponseStatusForInteraction(newInteraction);
 
             return newInteraction;
         }
         throw Error;
-    };
-
-    private getResponseBodyForApiFunction = (apiFunctionNode: tsMorph.Node) => {
-        const functionBody = apiFunctionNode.getFirstChildByKind(ts.SyntaxKind.Block);
-        const responseBodyType =
-            (functionBody && InteractionCreator.getResponseTypeFromFunctionBody(functionBody)) ||
-            InteractionCreator.getReturnTypeOfFunction(apiFunctionNode.getType());
-        const basicTypeRepresentationOfResponse = getTypeRepresentation(responseBodyType, this.sourceFile, true);
-        return {
-            body: changeObjectRepresentationIntoExample(basicTypeRepresentationOfResponse),
-            matchingRules: changeObjectRepresentationIntoMatchingRules(basicTypeRepresentationOfResponse, '$.body'),
-        };
-    };
-
-    private getRequestBodyForApiFunction = (apiFunctionNode: tsMorph.Node) => {
-        const requestBodyElement =
-            InteractionCreator.getParameterWithJsDocFromFunction(apiFunctionNode, PACT_ANNOTATIONS.PACT_REQUEST_BODY) ||
-            InteractionCreator.getVariableWithJsDocFromFunction(apiFunctionNode, PACT_ANNOTATIONS.PACT_REQUEST_BODY);
-        if (requestBodyElement) {
-            const requestBodyElementType = requestBodyElement.getType();
-            const basicTypeRepresentationOfRequestBody = getTypeRepresentation(requestBodyElementType, this.sourceFile);
-            return {
-                body: changeObjectRepresentationIntoExample(basicTypeRepresentationOfRequestBody),
-                matchingRules: changeObjectRepresentationIntoMatchingRules(basicTypeRepresentationOfRequestBody, '$.body'),
-            };
-        }
-    };
-
-    private getQueryRequestForApiFunction = (apiFunctionNode: tsMorph.Node) => {
-        const queryElement =
-            InteractionCreator.getParameterWithJsDocFromFunction(apiFunctionNode, PACT_ANNOTATIONS.PACT_QUERY) ||
-            InteractionCreator.getVariableWithJsDocFromFunction(apiFunctionNode, PACT_ANNOTATIONS.PACT_QUERY);
-        if (queryElement) {
-            const queryElementType = queryElement.getType();
-            const basicTypeRepresentationOfRequestBody = getTypeRepresentation(queryElementType, this.sourceFile);
-            const exampleRepresentationOfQueryObject = changeObjectRepresentationIntoExample(basicTypeRepresentationOfRequestBody);
-            return {
-                query: qs.stringify(exampleRepresentationOfQueryObject, {arrayFormat: this.provider.queryArrayFormat || 'brackets'}),
-                matchingRules: changeObjectRepresentationIntoMatchingRules(basicTypeRepresentationOfRequestBody, '$.query'),
-            };
-        }
     };
 
     private static getFunctionNode = (node: tsMorph.Node): tsMorph.Node | undefined => {
@@ -153,7 +132,7 @@ export class InteractionCreator {
         }
     };
 
-    private static getResponseTypeFromFunctionBody = (bodyOfFunction: tsMorph.Block): tsMorph.Type | undefined => {
+    static getResponseTypeFromFunctionBody = (bodyOfFunction: tsMorph.Block): tsMorph.Type | undefined => {
         const responseBodyJsDoc = bodyOfFunction.getDescendantsOfKind(ts.SyntaxKind.JSDoc).find((jsDocComment) => {
             return (
                 jsDocComment.getFirstChildByKind(ts.SyntaxKind.JSDocTag)?.getFirstChildByKind(ts.SyntaxKind.Identifier)?.getText() ===
@@ -166,7 +145,7 @@ export class InteractionCreator {
         }
     };
 
-    private static getReturnTypeOfFunction = (functionType: tsMorph.Type) => {
+    static getReturnTypeOfFunction = (functionType: tsMorph.Type) => {
         const returnType = functionType.getCallSignatures()[0].getReturnType();
         if (returnType.getTargetType()?.getText() === 'Promise<T>') {
             return returnType.getTypeArguments()[0];
@@ -174,7 +153,7 @@ export class InteractionCreator {
         return returnType;
     };
 
-    private static getParameterWithJsDocFromFunction = (
+    static getParameterWithJsDocFromFunction = (
         functionDeclaration: tsMorph.Node,
         jsDoc: string,
     ): tsMorph.ParameterDeclaration | undefined => {
@@ -190,7 +169,7 @@ export class InteractionCreator {
         }
     };
 
-    private static getVariableWithJsDocFromFunction = (
+    static getVariableWithJsDocFromFunction = (
         functionDeclaration: tsMorph.Node,
         jsDoc: string,
     ): tsMorph.VariableDeclaration | undefined => {

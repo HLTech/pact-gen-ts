@@ -15,6 +15,7 @@ describe('createPacts', () => {
         'axios',
         'matching-rules',
         'different-functions',
+        'pact-axios',
     ])('%s', (testCase) => {
         const pactsConfig = pactsConfigFactory(testCase);
 

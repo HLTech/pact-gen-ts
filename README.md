@@ -136,11 +136,44 @@ module.exports = {
 };
 ```
 
+## Integrations
+
+#### Axios - `@pact-axios`
+
+Sets REST method, expected body for the current response, expected body for current request and query based on axios definitions.
+
+```ts
+/**
+ * @pact
+ * @pact-axios
+ * @pact-path /api
+ */
+async function fetchComments(commentId: string) {
+    const {data} = await axios.post<string>('/api', {commentId});
+    // ...
+}
+```
+
+**IMPORTANT** - If axios function does not return any type explicitly it is needed to set `<void>` as an axios return type
+
+```ts
+/**
+ * @pact
+ * @pact-axios
+ * @pact-path /api
+ */
+async function fetchComments(commentId: string) {
+    await axios.post<void>('/api', {commentId});
+}
+```
+
 ## Pact interaction options
 
 These JSDoc custom tags are used to adjust generated pact interactions.
 
-`@pact-method` - sets REST method (GET, POST, PUT, PATCH, DELETE etc.)
+#### `@pact-method`
+
+Sets REST method (GET, POST, PUT, PATCH, DELETE etc.).
 
 ```ts
 /**
@@ -152,7 +185,9 @@ function fetchComments() {
 }
 ```
 
-`@pact-path` - sets path
+#### `@pact-path`
+
+Sets path.
 
 ```ts
 /**
@@ -164,7 +199,9 @@ function fetchImage(imageId: number) {
 }
 ```
 
-`@pact-description` - sets description, if not provided, description is set using name of the function / variable / property.
+#### `@pact-description`
+
+Sets description, if not provided, description is set using name of the function / variable / property.
 
 ```ts
 /**
@@ -176,7 +213,9 @@ function fetchComments() {
 }
 ```
 
-`@pact-response-status` - sets response status, if not provided, it is set based on given HTTP method
+#### `@pact-response-status`
+
+Sets response status, if not provided, it is set based on given HTTP method.
 
 ```ts
 /**
@@ -188,7 +227,9 @@ function fetchComments() {
 }
 ```
 
-`@pact-request-header` - adds a header to the current request, can override option defined in `pacts.config.js`
+#### `@pact-request-header`
+
+Adds a header to the current request, can override option defined in `pacts.config.js`.
 
 ```ts
 /**
@@ -200,7 +241,9 @@ function fetchImage(imageId: number) {
 }
 ```
 
-`@pact-response-header` - adds a header to the current response, can override option defined in `pacts.config.js`
+#### `@pact-response-header`
+
+Adds a header to the current response, can override option defined in `pacts.config.js`.
 
 ```ts
 /**
@@ -212,7 +255,9 @@ function fetchImage(imageId: number) {
 }
 ```
 
-`@pact-response-body` - sets expected body for the current response
+#### `@pact-response-body`
+
+Sets expected body for the current response.
 
 ```ts
 /**
@@ -241,7 +286,9 @@ async function fetchComments() {
 }
 ```
 
-`@pact-request-body` - sets expected body for current request
+#### `@pact-request-body`
+
+Sets expected body for current request.
 
 ```ts
 function addComment(/** @pact-request-body */ newComment: NewComment) {
@@ -267,9 +314,11 @@ function addComment(postId: string, commentContent: string) {
 }
 ```
 
-`@pact-query` - sets query, **IMPORTANT** - JSDoc tag has to be applied to an object - not a primitive value.
+#### `@pact-query`
 
-Array separator format can be set using `queryArrayFormat` in providers options
+Sets query, **IMPORTANT** - JSDoc tag has to be applied to an object - not a primitive value.
+
+Array separator format can be set using `queryArrayFormat` in providers options.
 
 ```ts
 function fetchComments(/** @pact-query */ query: Query) {
