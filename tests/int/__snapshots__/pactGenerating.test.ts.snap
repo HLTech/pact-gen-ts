@@ -519,6 +519,178 @@ Object {
 }
 `;
 
+exports[`createPacts pact-axios 1`] = `
+Object {
+  "consumer": Object {
+    "name": "consumer-name",
+  },
+  "interactions": Array [
+    Object {
+      "description": "getPactAxiosApiFunction",
+      "request": Object {
+        "headers": Object {},
+        "method": "GET",
+        "path": "/api",
+      },
+      "response": Object {
+        "body": "text",
+        "headers": Object {},
+        "status": 200,
+      },
+    },
+    Object {
+      "description": "customAxiosInstancePactAxiosApiFunction",
+      "request": Object {
+        "headers": Object {},
+        "method": "GET",
+        "path": "/api",
+      },
+      "response": Object {
+        "body": Object {
+          "numberField": 10,
+          "stringField": "text",
+        },
+        "headers": Object {},
+        "status": 200,
+      },
+    },
+    Object {
+      "description": "postPactAxiosApiFunction",
+      "request": Object {
+        "body": Object {
+          "numberField": 10,
+          "stringField": "text",
+        },
+        "headers": Object {},
+        "method": "POST",
+        "path": "/api",
+      },
+      "response": Object {
+        "headers": Object {},
+        "status": 201,
+      },
+    },
+    Object {
+      "description": "putPactAxiosApiFunction",
+      "request": Object {
+        "body": Object {
+          "numberField": 10,
+          "stringField": "text",
+        },
+        "headers": Object {},
+        "method": "PUT",
+        "path": "/api",
+      },
+      "response": Object {
+        "body": "text",
+        "headers": Object {},
+        "status": 200,
+      },
+    },
+    Object {
+      "description": "patchPactAxiosApiFunction",
+      "request": Object {
+        "body": Object {
+          "numberField": 10,
+          "stringField": "text",
+        },
+        "headers": Object {},
+        "method": "PATCH",
+        "path": "/api",
+      },
+      "response": Object {
+        "headers": Object {},
+        "status": 204,
+      },
+    },
+    Object {
+      "description": "deletePactAxiosApiFunction",
+      "request": Object {
+        "headers": Object {},
+        "method": "DELETE",
+        "path": "/api",
+      },
+      "response": Object {
+        "headers": Object {},
+        "status": 204,
+      },
+    },
+    Object {
+      "description": "getPactAxiosWithQueryApiFunction",
+      "request": Object {
+        "headers": Object {},
+        "method": "GET",
+        "path": "/api/query",
+        "query": "page=10&limit=10",
+      },
+      "response": Object {
+        "body": "text",
+        "headers": Object {},
+        "status": 200,
+      },
+    },
+    Object {
+      "description": "getPactAxiosWithDataAndQueryApiFunction",
+      "request": Object {
+        "body": Object {
+          "postId": "text",
+        },
+        "headers": Object {},
+        "method": "POST",
+        "path": "/api/post",
+        "query": "page=10&limit=10",
+      },
+      "response": Object {
+        "body": "text",
+        "headers": Object {},
+        "status": 201,
+      },
+    },
+    Object {
+      "description": "getPactAxiosWithDataConfigApiFunction",
+      "request": Object {
+        "body": Object {
+          "id": "text",
+        },
+        "headers": Object {},
+        "method": "DELETE",
+        "path": "/api",
+      },
+      "response": Object {
+        "headers": Object {},
+        "status": 204,
+      },
+    },
+    Object {
+      "description": "getPactAxiosClassMethod",
+      "request": Object {
+        "headers": Object {},
+        "method": "GET",
+        "path": "/posts",
+        "query": "select=text",
+      },
+      "response": Object {
+        "body": Array [
+          Object {
+            "id": "text",
+          },
+        ],
+        "headers": Object {},
+        "status": 200,
+      },
+    },
+  ],
+  "metadata": Object {
+    "pactSpecification": Object {
+      "version": "2.0.0",
+    },
+  },
+  "provider": Object {
+    "name": "provider-name",
+  },
+}
+`;
+
 exports[`createPacts pact-example 1`] = `
 Object {
   "consumer": Object {
