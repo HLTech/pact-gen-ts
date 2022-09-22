@@ -1,5 +1,6 @@
 import * as tsMorph from 'ts-morph';
 import * as ts from 'typescript';
+import {exampleRepresentationOfType} from '../../core/create-pact-example-object';
 
 export class PactAxios {
     public axiosCallExpression: tsMorph.CallExpression;
@@ -53,6 +54,11 @@ export class PactAxios {
         return this.getAxiosConfigProperty('params');
     }
 
+    getPath() {
+        const firstAxiosCallArgument = this.axiosCallExpression.getArguments()[0];
+        return this.generatePathFromNode(firstAxiosCallArgument);
+    }
+
     getRequestBodyType() {
         const requestMethod = this.getRequestMethod();
         const secondAxiosCallArgument = this.axiosCallExpression.getArguments()[1];
@@ -80,5 +86,51 @@ export class PactAxios {
             .getArguments()
             .find((argument) => argument.getType().getProperties()[0]?.getEscapedName() === property);
         return axiosConfig?.getType().getProperty(property)?.getValueDeclaration()?.getType();
+    }
+
+    /** Recursively find path under axios url argument - which might be string, template string, concatenation, variable etc. */
+    private generatePathFromNode(node: tsMorph.Node): string {
+        // simple string
+        if (node.getType().isStringLiteral()) {
+            return node.getType().getText().replace(/["']/g, '');
+        }
+
+        // template string
+        if (node.isKind(ts.SyntaxKind.TemplateExpression)) {
+            return node
+                .getDescendants()
+                .flatMap((child) => {
+                    if (child.isKind(ts.SyntaxKind.Identifier)) {
+                        return exampleRepresentationOfType(child.getType().getText()) || child.getType().getText().replace(/["']/g, '');
+                    } else if (child.isKind(ts.SyntaxKind.TemplateMiddle) || child.isKind(ts.SyntaxKind.TemplateHead)) {
+                        return child.getText().replace(/[${}]/g, '');
+                    }
+                })
+                .filter(Boolean)
+                .join('')
+                .replace('`', '');
+        }
+
+        // concatenated string
+        if (node.isKind(ts.SyntaxKind.BinaryExpression)) {
+            return node
+                .getChildren()
+                .map((ch) => {
+                    if (ch.getType().isStringLiteral() || ch.isKind(ts.SyntaxKind.Identifier)) {
+                        return exampleRepresentationOfType(ch.getType().getText()) || ch.getType().getText().replace(/["']/g, '');
+                    }
+                })
+                .filter(Boolean)
+                .join('');
+        }
+
+        // get path from argument variable
+        if (node.isKind(ts.SyntaxKind.Identifier)) {
+            const variableDefinitionNodes = node.getDefinitionNodes()[0].getChildren();
+
+            return this.generatePathFromNode(variableDefinitionNodes[variableDefinitionNodes.length - 1]);
+        }
+
+        throw Error();
     }
 }

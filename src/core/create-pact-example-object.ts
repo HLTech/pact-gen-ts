@@ -2,7 +2,7 @@ import {createMapper} from '../utils/mapper';
 import {isLiteralObject} from '../utils/object-type';
 import {TypeRepresentation} from './type-representation';
 
-const exampleRepresentationOfType = createMapper<unknown, boolean | number | string>([
+export const exampleRepresentationOfType = createMapper<unknown, boolean | number | string>([
     ['boolean', true],
     ['number', 10],
     ['string', 'text'],

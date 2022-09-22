@@ -73,6 +73,7 @@ export class InteractionCreator {
 
                 newInteraction.request.method = pactAxios.getRequestMethod();
 
+                newInteraction.request.path ||= pactAxios.getPath();
                 responseBody = new PactAxiosResponseBody(pactAxios, this.sourceFile);
                 requestBody = new PactAxiosRequestBody(pactAxios, this.sourceFile);
                 queryOfRequest = new PactAxiosQuery(pactAxios, this.sourceFile, this.provider.queryArrayFormat);

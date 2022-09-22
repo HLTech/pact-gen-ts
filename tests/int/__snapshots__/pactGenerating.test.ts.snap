@@ -526,6 +526,91 @@ Object {
   },
   "interactions": Array [
     Object {
+      "description": "getPactAxiosArgumentPathFunction",
+      "request": Object {
+        "headers": Object {},
+        "method": "GET",
+        "path": "/clients/10",
+      },
+      "response": Object {
+        "body": "text",
+        "headers": Object {},
+        "status": 200,
+      },
+    },
+    Object {
+      "description": "getPactAxiosTemplateStringPathFunction",
+      "request": Object {
+        "headers": Object {},
+        "method": "DELETE",
+        "path": "/api/client/1/application/1",
+      },
+      "response": Object {
+        "headers": Object {},
+        "status": 204,
+      },
+    },
+    Object {
+      "description": "getPactAxiosVariablePathFunction",
+      "request": Object {
+        "headers": Object {},
+        "method": "DELETE",
+        "path": "/api/applications",
+      },
+      "response": Object {
+        "headers": Object {},
+        "status": 204,
+      },
+    },
+    Object {
+      "description": "getPactAxiosVariableConcatPathFunction",
+      "request": Object {
+        "headers": Object {},
+        "method": "DELETE",
+        "path": "/api/applications",
+      },
+      "response": Object {
+        "headers": Object {},
+        "status": 204,
+      },
+    },
+    Object {
+      "description": "getPactAxiosVariableConcatPathWithVariableFunction",
+      "request": Object {
+        "headers": Object {},
+        "method": "DELETE",
+        "path": "/api/text",
+      },
+      "response": Object {
+        "headers": Object {},
+        "status": 204,
+      },
+    },
+    Object {
+      "description": "getPactAxiosVariableTemplateStringPathFunction",
+      "request": Object {
+        "headers": Object {},
+        "method": "DELETE",
+        "path": "/api/client/1/application/1",
+      },
+      "response": Object {
+        "headers": Object {},
+        "status": 204,
+      },
+    },
+    Object {
+      "description": "getPactAxiosConcatedPathFunction",
+      "request": Object {
+        "headers": Object {},
+        "method": "DELETE",
+        "path": "/api/client/1",
+      },
+      "response": Object {
+        "headers": Object {},
+        "status": 204,
+      },
+    },
+    Object {
       "description": "getPactAxiosApiFunction",
       "request": Object {
         "headers": Object {},
