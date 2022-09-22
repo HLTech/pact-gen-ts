@@ -526,6 +526,143 @@ exports[`createPacts pact-axios 1`] = `
   },
   "interactions": [
     {
+      "description": "getPactAxiosSingleQuoteArgumentPathApiFunction",
+      "request": {
+        "headers": {},
+        "method": "GET",
+        "path": "/clients",
+      },
+      "response": {
+        "body": "text",
+        "headers": {},
+        "status": 200,
+      },
+    },
+    {
+      "description": "getPactAxiosDoubleQuoteArgumentPathApiFunction",
+      "request": {
+        "headers": {},
+        "method": "GET",
+        "path": "/clients",
+      },
+      "response": {
+        "body": "text",
+        "headers": {},
+        "status": 200,
+      },
+    },
+    {
+      "description": "getPactAxiosTemplateStringArgumentPathApiFunction",
+      "request": {
+        "headers": {},
+        "method": "GET",
+        "path": "/clients",
+      },
+      "response": {
+        "body": "text",
+        "headers": {},
+        "status": 200,
+      },
+    },
+    {
+      "description": "getPactAxiosArgumentPathFunction",
+      "request": {
+        "headers": {},
+        "method": "GET",
+        "path": "/clients/10/posts",
+      },
+      "response": {
+        "body": "text",
+        "headers": {},
+        "status": 200,
+      },
+    },
+    {
+      "description": "getPactAxiosTemplateStringPathFunction",
+      "request": {
+        "headers": {},
+        "method": "DELETE",
+        "path": "/api/client/1/application/1",
+      },
+      "response": {
+        "headers": {},
+        "status": 204,
+      },
+    },
+    {
+      "description": "getPactAxiosVariablePathFunction",
+      "request": {
+        "headers": {},
+        "method": "DELETE",
+        "path": "/api/applications",
+      },
+      "response": {
+        "headers": {},
+        "status": 204,
+      },
+    },
+    {
+      "description": "getPactAxiosVariableConcatPathFunction",
+      "request": {
+        "headers": {},
+        "method": "DELETE",
+        "path": "/api/applications",
+      },
+      "response": {
+        "headers": {},
+        "status": 204,
+      },
+    },
+    {
+      "description": "getPactAxiosVariableConcatPathWithVariableFunction",
+      "request": {
+        "headers": {},
+        "method": "DELETE",
+        "path": "/api/text",
+      },
+      "response": {
+        "headers": {},
+        "status": 204,
+      },
+    },
+    {
+      "description": "getPactAxiosVariableTemplateStringPathFunction",
+      "request": {
+        "headers": {},
+        "method": "DELETE",
+        "path": "/api/client/1/application/1",
+      },
+      "response": {
+        "headers": {},
+        "status": 204,
+      },
+    },
+    {
+      "description": "getPactAxiosConcatenatedPathFunction",
+      "request": {
+        "headers": {},
+        "method": "DELETE",
+        "path": "/api/client/1",
+      },
+      "response": {
+        "headers": {},
+        "status": 204,
+      },
+    },
+    {
+      "description": "getPactAxiosPathOverrideApiFunction",
+      "request": {
+        "headers": {},
+        "method": "GET",
+        "path": "/api/override",
+      },
+      "response": {
+        "body": "text",
+        "headers": {},
+        "status": 200,
+      },
+    },
+    {
       "description": "getPactAxiosApiFunction",
       "request": {
         "headers": {},
