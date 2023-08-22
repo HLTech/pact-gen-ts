@@ -13,6 +13,7 @@ interface CommonProviderConfig {
     requestHeaders?: Record<string, string>;
     responseHeaders?: Record<string, string>;
     queryArrayFormat?: IStringifyOptions['arrayFormat'];
+    baseURL?: string;
 }
 
 export interface ProviderConfig extends CommonProviderConfig {

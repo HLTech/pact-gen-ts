@@ -83,6 +83,9 @@ export class InteractionCreator {
                 queryOfRequest = new Query(apiFunctionNode, this.sourceFile, this.provider.queryArrayFormat);
             }
 
+            if (this.provider.baseURL) {
+                newInteraction.request.path = this.provider.baseURL + (newInteraction.request.path || '');
+            }
             newInteraction.response.body = responseBody.body;
             newInteraction.response.matchingRules = responseBody.matchingRules;
             newInteraction.request.body = requestBody.body;

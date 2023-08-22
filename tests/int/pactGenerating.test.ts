@@ -26,6 +26,26 @@ describe('createPacts', () => {
         });
     });
 
+    test('base-url', () => {
+        const pactsConfig = {
+            consumer: 'consumer-name',
+            buildDir: 'pacts',
+            providers: [
+                {
+                    provider: 'provider-name',
+                    files: ['tests/int/testCases/base-url/**/*.ts'],
+                    baseURL: '/api/v1',
+                },
+            ],
+        };
+
+        const generatedPacts = createPacts(pactsConfig);
+
+        generatedPacts.forEach((pact) => {
+            expect(JSON.parse(JSON.stringify(pact, null, 2))).toMatchSnapshot();
+        });
+    });
+
     test.each<IStringifyOptions['arrayFormat']>(['brackets', 'indices', 'comma', 'repeat'])(
         'handles "%s" array format for query params',
         (queryArrayFormat) => {
