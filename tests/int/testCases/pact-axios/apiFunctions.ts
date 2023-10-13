@@ -1,6 +1,103 @@
 import axios, {AxiosInstance} from 'axios';
 import {axiosInstance} from './axios-instance';
 
+export const applicationId = '1';
+export const clientNo = '1';
+
+/**
+ * @pact
+ * @pact-axios
+ */
+export async function getPactAxiosSingleQuoteArgumentPathApiFunction() {
+    const {data} = await axios.get<string>('/clients');
+}
+
+/**
+ * @pact
+ * @pact-axios
+ */
+export async function getPactAxiosDoubleQuoteArgumentPathApiFunction() {
+    const {data} = await axios.get<string>("/clients");
+}
+
+/**
+ * @pact
+ * @pact-axios
+ */
+export async function getPactAxiosTemplateStringArgumentPathApiFunction() {
+    const {data} = await axios.get<string>(`/clients`);
+}
+
+/**
+ * @pact
+ * @pact-axios
+ */
+export const getPactAxiosArgumentPathFunction = async (clientNumber: number) => {
+    const {data} = await axios.get<string>(`/clients/${clientNumber}/posts`);
+    return data;
+};
+
+/**
+ * @pact
+ * @pact-axios
+ */
+export async function getPactAxiosTemplateStringPathFunction() {
+    await axios.delete<void>(`/api/client/${clientNo}/application/${applicationId}`);
+}
+
+/**
+ * @pact
+ * @pact-axios
+ */
+export async function getPactAxiosVariablePathFunction() {
+    const endpointUrl = '/api/applications';
+    await axios.delete<void>(endpointUrl);
+}
+
+/**
+ * @pact
+ * @pact-axios
+ */
+export async function getPactAxiosVariableConcatPathFunction() {
+    const endpointUrl = '/api/' + 'applications';
+    await axios.delete<void>(endpointUrl);
+}
+
+/**
+ * @pact
+ * @pact-axios
+ */
+export async function getPactAxiosVariableConcatPathWithVariableFunction(param: string) {
+    const endpointUrl = '/api/' + param;
+    await axios.delete<void>(endpointUrl);
+}
+
+/**
+ * @pact
+ * @pact-axios
+ */
+export async function getPactAxiosVariableTemplateStringPathFunction() {
+    const endpointUrl = `/api/client/${clientNo}/application/${applicationId}`;
+    await axios.delete<void>(endpointUrl);
+}
+
+/**
+ * @pact
+ * @pact-axios
+ */
+export async function getPactAxiosConcatenatedPathFunction() {
+    await axios.delete<void>('/api/client/' + clientNo);
+}
+
+/**
+ * @pact
+ * @pact-axios
+ * @pact-path /api/override
+ */
+export async function getPactAxiosPathOverrideApiFunction() {
+    const {data} = await axios.get<string>('/api');
+}
+
 /**
  * @pact
  * @pact-axios

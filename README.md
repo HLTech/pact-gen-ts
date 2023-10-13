@@ -90,6 +90,7 @@ module.exports = {
             responseHeaders: {
                 'Content-Type': 'application/json',
             },
+            baseURL: '/api/v1',
         },
     ],
 };
@@ -105,6 +106,7 @@ module.exports = {
 | `providers[].requestHeaders`   |    No    |      -       | Request headers shared across all requests                                                                                                                                                           |
 | `providers[].responseHeaders`  |    No    |      -       | Response headers shared across all responses                                                                                                                                                         |
 | `providers[].queryArrayFormat` |    No    | `"brackets"` | Sets separator for array in query - possible options are `"indices"`, `"brackets"`, `"comma"` and `"repeat"` [(source)](https://github.com/ljharb/qs#stringifying). The default value is `brackets`. |
+| `providers[].baseURL`          |    No    |     `""`     | Adds prefix to path shared across all requests                                                                                                                                                       |
 | `buildDir`                     |    No    |  `./pacts`   | Directory where generated pacts will be placed                                                                                                                                                       |
 | `verbose`                      |    No    |   `false`    | If set to `true` additional information during pacts generating process will be logged                                                                                                               |
 
@@ -137,6 +139,7 @@ module.exports = {
             queryArrayFormat: 'comma',
         },
     ],
+    baseURL: '/api/v1',
 };
 ```
 

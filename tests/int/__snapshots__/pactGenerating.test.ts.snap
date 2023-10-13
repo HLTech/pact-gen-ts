@@ -82,6 +82,49 @@ exports[`createPacts axios 1`] = `
 }
 `;
 
+exports[`createPacts base-url 1`] = `
+{
+  "consumer": {
+    "name": "consumer-name",
+  },
+  "interactions": [
+    {
+      "description": "baseUrlConfigAxiosFunction",
+      "request": {
+        "headers": {},
+        "method": "GET",
+        "path": "/api/v1/clients",
+      },
+      "response": {
+        "body": "text",
+        "headers": {},
+        "status": 200,
+      },
+    },
+    {
+      "description": "baseUrlApiFunction",
+      "request": {
+        "headers": {},
+        "path": "/api/v1",
+      },
+      "response": {
+        "body": "text",
+        "headers": {},
+        "status": 200,
+      },
+    },
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0",
+    },
+  },
+  "provider": {
+    "name": "provider-name",
+  },
+}
+`;
+
 exports[`createPacts basic 1`] = `
 {
   "consumer": {
@@ -525,6 +568,143 @@ exports[`createPacts pact-axios 1`] = `
     "name": "consumer-name",
   },
   "interactions": [
+    {
+      "description": "getPactAxiosSingleQuoteArgumentPathApiFunction",
+      "request": {
+        "headers": {},
+        "method": "GET",
+        "path": "/clients",
+      },
+      "response": {
+        "body": "text",
+        "headers": {},
+        "status": 200,
+      },
+    },
+    {
+      "description": "getPactAxiosDoubleQuoteArgumentPathApiFunction",
+      "request": {
+        "headers": {},
+        "method": "GET",
+        "path": "/clients",
+      },
+      "response": {
+        "body": "text",
+        "headers": {},
+        "status": 200,
+      },
+    },
+    {
+      "description": "getPactAxiosTemplateStringArgumentPathApiFunction",
+      "request": {
+        "headers": {},
+        "method": "GET",
+        "path": "/clients",
+      },
+      "response": {
+        "body": "text",
+        "headers": {},
+        "status": 200,
+      },
+    },
+    {
+      "description": "getPactAxiosArgumentPathFunction",
+      "request": {
+        "headers": {},
+        "method": "GET",
+        "path": "/clients/10/posts",
+      },
+      "response": {
+        "body": "text",
+        "headers": {},
+        "status": 200,
+      },
+    },
+    {
+      "description": "getPactAxiosTemplateStringPathFunction",
+      "request": {
+        "headers": {},
+        "method": "DELETE",
+        "path": "/api/client/1/application/1",
+      },
+      "response": {
+        "headers": {},
+        "status": 204,
+      },
+    },
+    {
+      "description": "getPactAxiosVariablePathFunction",
+      "request": {
+        "headers": {},
+        "method": "DELETE",
+        "path": "/api/applications",
+      },
+      "response": {
+        "headers": {},
+        "status": 204,
+      },
+    },
+    {
+      "description": "getPactAxiosVariableConcatPathFunction",
+      "request": {
+        "headers": {},
+        "method": "DELETE",
+        "path": "/api/applications",
+      },
+      "response": {
+        "headers": {},
+        "status": 204,
+      },
+    },
+    {
+      "description": "getPactAxiosVariableConcatPathWithVariableFunction",
+      "request": {
+        "headers": {},
+        "method": "DELETE",
+        "path": "/api/text",
+      },
+      "response": {
+        "headers": {},
+        "status": 204,
+      },
+    },
+    {
+      "description": "getPactAxiosVariableTemplateStringPathFunction",
+      "request": {
+        "headers": {},
+        "method": "DELETE",
+        "path": "/api/client/1/application/1",
+      },
+      "response": {
+        "headers": {},
+        "status": 204,
+      },
+    },
+    {
+      "description": "getPactAxiosConcatenatedPathFunction",
+      "request": {
+        "headers": {},
+        "method": "DELETE",
+        "path": "/api/client/1",
+      },
+      "response": {
+        "headers": {},
+        "status": 204,
+      },
+    },
+    {
+      "description": "getPactAxiosPathOverrideApiFunction",
+      "request": {
+        "headers": {},
+        "method": "GET",
+        "path": "/api/override",
+      },
+      "response": {
+        "body": "text",
+        "headers": {},
+        "status": 200,
+      },
+    },
     {
       "description": "getPactAxiosApiFunction",
       "request": {
