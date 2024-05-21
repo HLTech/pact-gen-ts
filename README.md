@@ -68,7 +68,9 @@ If you're limited to historical versions of TypeScript, you should install a cor
 | 0.11.0         | 4.9        |
 | 0.12.0         | 5.0        |
 | 0.13.0         | 5.1        |
-| 0.14.0 - x     | \>=5.2     |
+| 0.14.0         | 5.2 - 5.3  |
+| 0.15.0         | \>=5.4     |
+
 
 ## Configuration
 
