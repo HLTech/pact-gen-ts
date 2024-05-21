@@ -20,7 +20,8 @@
     "scripts": {
         "build": "tsc -p tsconfig.json",
         "release": "semantic-release",
-        "test": "jest"
+        "test": "jest",
+        "prepare": "husky"
     },
     "dependencies": {
         "glob": "^7.1.6",
