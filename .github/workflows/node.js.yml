@@ -11,18 +11,18 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v2
-            - name: Use Node.js 14.x
-              uses: actions/setup-node@v1
+            - uses: actions/checkout@v4
+            - name: Use Node.js 20
+              uses: actions/setup-node@v4
               with:
-                  node-version: 14.x
+                  node-version: 20
             - run: npm ci
             - run: npm run build
             - run: npm test
             - name: Archive build artifacts
-              uses: actions/upload-artifact@v2
+              uses: actions/upload-artifact@v4
               with:
-                  name: build-14.x
+                  name: build-20.x
                   path: lib
 
     release:
@@ -32,18 +32,18 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
-              uses: actions/checkout@v2
+              uses: actions/checkout@v4
               with:
                   fetch-depth: 0
-            - name: Setup Node.js
-              uses: actions/setup-node@v1
+            - name: Setup Node.js 20
+              uses: actions/setup-node@v4
               with:
-                  node-version: 14.x
+                  node-version: 20
                   registry-url: 'https://registry.npmjs.org'
             - name: Download build artifacts
-              uses: actions/download-artifact@v2
+              uses: actions/download-artifact@v4
               with:
-                  name: build-14.x
+                  name: build-20.x
                   path: lib
             - name: Release
               run: npm publish
