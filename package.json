@@ -21,7 +21,7 @@
         "build": "tsc -p tsconfig.json",
         "release": "semantic-release",
         "test": "jest",
-        "prepare": "husky"
+        "prepare": "node .husky/install.mjs"
     },
     "dependencies": {
         "glob": "^7.1.6",
