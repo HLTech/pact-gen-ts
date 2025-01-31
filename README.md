@@ -70,7 +70,8 @@ If you're limited to historical versions of TypeScript, you should install a cor
 | 0.13.0         | 5.1        |
 | 0.14.0         | 5.2 - 5.3  |
 | 0.15.0         | 5.4        |
-| 0.16.0         | \>=5.5     |
+| 0.16.0         | 5.5 - 5.6  |
+| 0.17.0         | \>=5.7     |
 
 ## Configuration
 
