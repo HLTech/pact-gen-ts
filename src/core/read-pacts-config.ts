@@ -20,14 +20,11 @@ export interface ProviderConfig extends CommonProviderConfig {
     files: string[];
 }
 
-const PACTS_CONFIG_FILE = '/pacts.config.js';
+const PACTS_CONFIG_FILE = 'pacts.config.js';
+const PACTS_CONFIG_FILE_CJS = 'pacts.config.cjs';
 
 export const readPactsConfig = (): PactConfig => {
-    const config = require(process.cwd() + PACTS_CONFIG_FILE);
-
-    if (!config) {
-        throw new Error('The config file is not defined properly.');
-    }
+    const config = readPactsConfigFile();
 
     if (!config.consumer) {
         throw new Error('The consumer name must be specified in the config file.');
@@ -38,4 +35,17 @@ export const readPactsConfig = (): PactConfig => {
     }
 
     return config;
+};
+
+const readPactsConfigFile = () => {
+    const configFilenames = [PACTS_CONFIG_FILE, PACTS_CONFIG_FILE_CJS] as const;
+
+    for (const configFilename in configFilenames) {
+        const config = require(`${process.cwd()}/${configFilename}`);
+        if (config) return config;
+    }
+
+    throw new Error(
+        `The config file is not defined properly. Please make sure that the one of following config files exist: ${configFilenames.join(', ')}`,
+    );
 };

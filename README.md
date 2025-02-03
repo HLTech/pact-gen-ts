@@ -19,7 +19,7 @@ or yarn:
 yarn add --dev pact-gen-ts
 ```
 
-Next you should create a minimal `pacts.config.js` configuration file in the root directory:
+Next you should create a minimal `pacts.config.js` or `pacts.config.cjs` configuration file in the root directory:
 
 ```js
 module.exports = {
