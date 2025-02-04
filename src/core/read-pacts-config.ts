@@ -40,7 +40,7 @@ export const readPactsConfig = (): PactConfig => {
 const readPactsConfigFile = () => {
     const configFilenames = [PACTS_CONFIG_FILE, PACTS_CONFIG_FILE_CJS] as const;
 
-    for (const configFilename in configFilenames) {
+    for (const configFilename of configFilenames) {
         const config = require(`${process.cwd()}/${configFilename}`);
         if (config) return config;
     }
