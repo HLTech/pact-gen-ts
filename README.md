@@ -60,18 +60,18 @@ Due to TypeScript's occasional changes to its compiler API and not following sem
 
 If you're limited to historical versions of TypeScript, you should install a corresponding version of pact-gen-ts. The below table presents what TS versions pact-gen-ts will work with:
 
-| pact-gen-ts    | TypeScript |
-| -------------- | ---------- |
-| 0.8            | 4.1 - 4.2  |
-| 0.9 - 0.9.3    | 4.5 - 4.6  |
-| 0.9.4 - 0.10.0 | 4.7 - 4.8  |
-| 0.11.0         | 4.9        |
-| 0.12.0         | 5.0        |
-| 0.13.0         | 5.1        |
-| 0.14.0         | 5.2 - 5.3  |
-| 0.15.0         | 5.4        |
-| 0.16.0         | 5.5 - 5.6  |
-| 0.17.0         | \>=5.7     |
+| pact-gen-ts     | TypeScript |
+| --------------- | ---------- |
+| 0.8             | 4.1 - 4.2  |
+| 0.9 - 0.9.3     | 4.5 - 4.6  |
+| 0.9.4 - 0.10.0  | 4.7 - 4.8  |
+| 0.11.0          | 4.9        |
+| 0.12.0          | 5.0        |
+| 0.13.0          | 5.1        |
+| 0.14.0          | 5.2 - 5.3  |
+| 0.15.0          | 5.4        |
+| 0.16.0          | 5.5 - 5.6  |
+| 0.17.0 - 0.18.0 | \>=5.7     |
 
 ## Configuration
 
