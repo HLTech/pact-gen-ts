@@ -2,9 +2,9 @@ import {createPacts} from './core/create-pacts';
 import {writeToFile} from './utils/write-to-file';
 import {readPactsConfig} from './core/read-pacts-config';
 
-export function run(process: NodeJS.Process) {
+export async function run(process: NodeJS.Process) {
     try {
-        const pactsConfig = readPactsConfig();
+        const pactsConfig = await readPactsConfig();
 
         const generatedPacts = createPacts(pactsConfig);
 
