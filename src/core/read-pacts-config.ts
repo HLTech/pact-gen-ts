@@ -20,32 +20,31 @@ export interface ProviderConfig extends CommonProviderConfig {
     files: string[];
 }
 
-const PACTS_CONFIG_FILE = 'pacts.config.js';
-const PACTS_CONFIG_FILE_CJS = 'pacts.config.cjs';
+const CONFIG_FILES = ['pacts.config.js', 'pacts.config.cjs'] as const;
 
-export const readPactsConfig = (): PactConfig => {
-    const config = readPactsConfigFile();
-
-    if (!config.consumer) {
-        throw new Error('The consumer name must be specified in the config file.');
-    }
-
-    if (!config.buildDir) {
-        config.buildDir = 'pacts';
-    }
-
+export const readPactsConfig = async (): Promise<PactConfig> => {
+    const config = await loadConfig();
+    validateAndNormalizeConfig(config);
     return config;
 };
 
-const readPactsConfigFile = () => {
-    const configFilenames = [PACTS_CONFIG_FILE, PACTS_CONFIG_FILE_CJS] as const;
+const validateAndNormalizeConfig = (config: PactConfig): void => {
+    if (!config.consumer) {
+        throw new Error('The consumer name must be specified in the config file.');
+    }
+    config.buildDir ??= 'pacts';
+};
 
-    for (const configFilename of configFilenames) {
-        const config = require(`${process.cwd()}/${configFilename}`);
-        if (config) return config;
+const loadConfig = async (): Promise<PactConfig> => {
+    const results = await Promise.allSettled(
+        CONFIG_FILES.map((filename) => import(`${process.cwd()}/${filename}`).catch(() => require(`${process.cwd()}/${filename}`))),
+    );
+
+    const validConfig = results.find((result) => result.status === 'fulfilled');
+
+    if (!validConfig) {
+        throw new Error(`Config file not found. Please ensure one of these exists: ${CONFIG_FILES.join(', ')}`);
     }
 
-    throw new Error(
-        `The config file is not defined properly. Please make sure that the one of following config files exist: ${configFilenames.join(', ')}`,
-    );
+    return (validConfig as PromiseFulfilledResult<PactConfig>).value;
 };
